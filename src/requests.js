@@ -67,3 +67,13 @@ export const getAllData = () => {
     return axios.get(`${baseURL}/all`)
     .catch(handleError);
 }
+
+export const startSoloGame = (token) => {
+    return axios.post(`${baseURL}/games`, {}, config(token))
+    .catch(handleError);
+}
+
+export const updateGameState = (token, game) => {
+    return axios.post(`${baseURL}/games/${game.id}`, game, config(token))
+    .catch(handleError);
+}

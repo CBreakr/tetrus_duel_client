@@ -9,11 +9,13 @@ import {
   Redirect
 } from "react-router-dom";
 
-import UserActionContainer from "./Containers/UserActionContainer";
-
 import * as requests from "./requests";
 
 import AuthContext from "./AuthContext";
+
+import UserActionContainer from "./Containers/UserActionContainer";
+import MainContainer from './Containers/MainContainer';
+import MatchContainer from './Containers/MatchContainer';
 
 const webSocketUrl = 'ws://localhost:3000/cable';
 let socket = null;
@@ -191,24 +193,55 @@ class App extends React.Component {
           ? <span>loaded</span>
           : <span>NOT loaded</span>
         }
-        This is some content in here
-        {
-          this.state.user && this.state.user.name
-        }
-        <br />
-        {
-          this.state.token
-        }
-        <br />
         {
           this.state.user
-          ? <span>We have a user <button onClick={this.logout}>Logout</button></span>
-          : <UserActionContainer setCurrentUser={this.setCurrentUser} />
+          ? <span>We have a user {this.state.user.name} <button onClick={this.logout}>Logout</button></span>
+          : ""
         }
         <button onClick={this.dataTest}>Test</button>
+        <br />
+        <br />
+        <br />
+        <br />
+        <Switch>
+            <Route exact path="/">
+              {
+                !this.state.user
+                ? <UserActionContainer setCurrentUser={this.setCurrentUser} />
+                : <MainContainer />
+              }
+            </Route>
+            <Route render={() => <WithContainer {...this.state} /> } />
+          </Switch>
       </AuthContext.Provider>
     );
   }
 }
 
 export default withRouter(App);
+
+const WithContainer = (props) => {
+  console.log("WITH CONTAINER PROPS", props);
+  return (
+    <div className="container grid">
+      {
+        props.user
+        ? <>
+            <Switch>
+              <Route path="/games/:id">
+                <MatchContainer />
+              </Route>
+              <Route path="/matches/:id">
+                <span>SPECTATOR VIEW</span>
+              </Route>
+              <Route path="/">
+                <Redirect to="/" />
+              </Route>
+            </Switch>
+          </>
+        : <> 
+          <Redirect to="/" />
+        </>
+      }
+    </div>)  
+}
