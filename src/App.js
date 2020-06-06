@@ -95,6 +95,22 @@ class App extends React.Component {
     // Creates the new websocket connection
     socket = new WebSocket(webSocketUrl);
 
+    /*
+    commentSocket.onopen = function(event) {
+        console.log('COMMENT WebSocket is connected.', commentSocket);
+
+        const msg = {
+            command: 'subscribe',
+            identifier: JSON.stringify({
+                id: questionId,
+                channel: 'QuestionChannel'
+            }),
+        };
+
+        commentSocket.send(JSON.stringify(msg));
+    };
+    */
+
     // When the connection is 1st created, this code runs subscribing the clien to a specific chatroom stream in the ChatRoomChannel
     socket.onopen = function(event) {
         console.log('WebSocket is connected.', socket);

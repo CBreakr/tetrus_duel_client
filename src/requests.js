@@ -77,3 +77,67 @@ export const updateGameState = (token, game) => {
     return axios.post(`${baseURL}/games/${game.id}`, game, config(token))
     .catch(handleError);
 }
+
+/*
+    get "/users/available", to: "users#available"
+    patch "/users/:id/enter_lobby", to: "users#enter_lobby"
+    
+    get "/matches/active", to: "matches#active"
+    post "/matches/issue_challenge", to: "matches#issue_challenge"
+    post "/matches/reject_challenge", to: "matches#reject_challenge"
+    post "/matches/accept_challenge", to: "matches#accept_challenge"
+    patch "/matches/:id", to: "matches#update"
+    patch "/matches/:id/concede", to: "matches#concede"
+    patch "/matches/:id/match_lost", to: "matches#match_lost"
+    patch "/matches/:id/accept_handshake", to: "matches#accept_handshake"
+*/
+
+export const getAvailableUsers = (token) => {
+    return axios.get(`${baseURL}/users/available`, config(token))
+    .catch(handleError);
+}
+
+export const updateGameState = (token, user_id) => {
+    return axios.patch(`${baseURL}/users/${user_id}/enter_lobby`, {}, config(token))
+    .catch(handleError);
+}
+
+export const getActiveMatches = (token) => {
+    return axios.get(`${baseURL}/matches/active`, config(token))
+    .catch(handleError);
+}
+
+export const issueChallenge = (token, user_being_challenged_id) => {
+    return axios.post(`${baseURL}/matches/issue_challenge`, {id: user_being_challenged_id}, config(token))
+    .catch(handleError);
+}
+
+export const rejectChallenge = (token, user_challenging_id) => {
+    return axios.post(`${baseURL}/matches/reject_challenge`, {id: user_challenging_id}, config(token))
+    .catch(handleError);
+}
+
+export const acceptChallenge = (token, user_challenging_id) => {
+    return axios.post(`${baseURL}/matches/accept_challenge`, {id: user_challenging_id}, config(token))
+    .catch(handleError);
+}
+
+export const acceptMatchHandshake = (token, match_id) => {
+    return axios.patch(`${baseURL}/matches/${match_id}/accept_handshake`, {}, config(token))
+    .catch(handleError);
+}
+
+export const updateMatch = (token, match_id, game) => {
+    return axios.patch(`${baseURL}/matches/${match_id}`, game, config(token))
+    .catch(handleError);
+}
+
+export const concedeMatch = (token, match_id) => {
+    return axios.patch(`${baseURL}/matches/${match_id}/concede`, {}, config(token))
+    .catch(handleError);
+}
+
+export const matchLost = (token, match_id) => {
+    return axios.patch(`${baseURL}/matches/${match_id}/match_lost`, {}, config(token))
+    .catch(handleError);
+}
