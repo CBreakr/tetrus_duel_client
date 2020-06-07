@@ -7,7 +7,7 @@ STRUCTURE
 */
 
 body {
-  /* overflow: hidden; */
+  overflow: hidden;
 }
 
 .match-container {
