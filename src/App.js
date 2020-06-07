@@ -17,7 +17,13 @@ import UserActionContainer from "./Containers/UserActionContainer";
 import MainContainer from './Containers/MainContainer';
 import MatchContainer from './Containers/MatchContainer';
 
-const webSocketUrl = 'ws://localhost:3000/cable';
+
+import createActiveMatchesWebsocketConnection from "./ActiveMatchesSocket";
+import createActivePlayersWebsocketConnection from "./ActivePlayersSocket";
+import createMatchWebsocketConnection from "./MatchSocket";
+
+
+// const webSocketUrl = 'ws://localhost:3000/cable';
 let socket = null;
 
 class App extends React.Component {
@@ -69,6 +75,10 @@ class App extends React.Component {
     }
 
     this.createNotificationWebsocketConnection();
+
+    createActiveMatchesWebsocketConnection(this.capture_func);
+    createActivePlayersWebsocketConnection(this.capture_func);
+    createMatchWebsocketConnection(1, this.capture_func);
   }
 
   dataTest = () => {
@@ -93,7 +103,7 @@ class App extends React.Component {
 
   createNotificationWebsocketConnection = () => {    
     // Creates the new websocket connection
-    socket = new WebSocket(webSocketUrl);
+    socket = new WebSocket(requests.webSocketUrl);
 
     /*
     commentSocket.onopen = function(event) {
@@ -151,6 +161,23 @@ class App extends React.Component {
       socket.onerror = function(error) {
           console.log('WebSocket Error: ', error);
       };
+  }
+
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+
+  capture_func = (message) => {
+    console.log("captured", message);
   }
 
   //

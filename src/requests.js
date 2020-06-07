@@ -3,6 +3,8 @@ import axios from "axios";
 // for now...
 const baseURL = "http://localhost:3000";
 
+export const webSocketUrl = 'ws://localhost:3000/cable';
+
 const handleError = err => console.error(err);
 
 const config = (token) => {
