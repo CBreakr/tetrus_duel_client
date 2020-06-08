@@ -74,11 +74,11 @@ class App extends React.Component {
       this.logout()
     }
 
-    this.createNotificationWebsocketConnection();
+    // this.createNotificationWebsocketConnection();
 
-    createActiveMatchesWebsocketConnection(this.capture_func);
-    createActivePlayersWebsocketConnection(this.capture_func);
-    createMatchWebsocketConnection(1, this.capture_func);
+    // createActiveMatchesWebsocketConnection(this.capture_func);
+    // createActivePlayersWebsocketConnection(this.capture_func);
+    // createMatchWebsocketConnection(1, this.capture_func);
   }
 
   dataTest = () => {
@@ -219,7 +219,7 @@ class App extends React.Component {
 
   logout = () => {
     console.log("LOGOUT");
-    requests.logoutUser()
+    requests.logoutUser(this.state.token)
     .then(res => {
       this.setCurrentUser(null);
       localStorage.removeItem('__tetris_duel_token_user_id__');

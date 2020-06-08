@@ -1,12 +1,6 @@
 
 import { webSocketUrl } from "./requests";
 
-/*
-MatchChannel.broadcast_to(match, {type:"match_state", {gamestate: game}})
-MatchChannel.broadcast_to(match, {type: "match_start"})
-MatchChannel.broadcast_to(match, {type:"match_over", message: {losing_game: game_id}})
-*/
-
 let socket = null;
 
 const createMatchWebsocketConnection = (match_id, capture_func) => {    
@@ -27,7 +21,6 @@ const createMatchWebsocketConnection = (match_id, capture_func) => {
         socket.send(JSON.stringify(msg));
     };
     
-    // When a message is received through the websocket, this code is run
     socket.onmessage = function(event) {            
         const response = event.data;
         const msg = JSON.parse(response);
@@ -39,16 +32,14 @@ const createMatchWebsocketConnection = (match_id, capture_func) => {
 
         console.log("MATCH MESSAGE RECEIVED", msg);
 
-        capture_func(msg);
+        capture_func(msg.message);
     };
 
-    // When the connection is closed, this code is run
     socket.onclose = function(event) {
         console.log('WebSocket is closed.');
         // returnToMainPage();
     };
     
-    // When an error occurs through the websocket connection, this code is run printing the error message
     socket.onerror = function(error) {
         console.log('WebSocket Error: ', error);
     };

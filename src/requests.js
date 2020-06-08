@@ -59,8 +59,8 @@ export const loginUser = (user, callback) => {
     });
 }
 
-export const logoutUser = () => {
-    return axios.post(`${baseURL}/users/logout`, null)
+export const logoutUser = (token) => {
+    return axios.post(`${baseURL}/users/logout`, {}, config(token))
     .catch(handleError);
 }
 

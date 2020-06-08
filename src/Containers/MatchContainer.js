@@ -2,6 +2,8 @@ import React from "react";
 
 import createMatchWebsocketConnection from "../MatchSocket";
 
+import { withRouter } from "react-router-dom";
+
 import Dashboard from "../Components/Dashboard";
 import GameContainer from "./GameContainer";
 
@@ -24,6 +26,11 @@ class MatchContainer extends React.Component {
         })
     }
 
+    /*
+    MatchChannel.broadcast_to(match, {type:"match_state", {gamestate: game}})
+    MatchChannel.broadcast_to(match, {type: "match_start"})
+    MatchChannel.broadcast_to(match, {type:"match_over", message: {losing_game: game_id}})
+    */
     capture_func = (message) => {
 
     }
@@ -38,4 +45,4 @@ class MatchContainer extends React.Component {
     }
 }
 
-export default MatchContainer;
+export default withRouter(MatchContainer);

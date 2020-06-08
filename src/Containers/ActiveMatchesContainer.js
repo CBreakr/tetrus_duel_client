@@ -12,6 +12,10 @@ class ActiveMatchesContainer extends React.Component {
         createActiveMatchesWebsocketConnection(this.capture_func)
     }
 
+    /*
+    ActionCable.server.broadcast "ActiveMatchesChannel", {type: "match_created", match: match}
+    ActionCable.server.broadcast "ActiveMatchesChannel", {type: "match_ended", match: match}
+    */
     capture_func = (socket_message) => {
 
     }
