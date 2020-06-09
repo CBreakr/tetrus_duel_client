@@ -275,7 +275,7 @@ const WithContainer = (props) => {
                 <MatchContainer />
               </Route>
               <Route path="/matches/:id">
-                <span>SPECTATOR VIEW</span>
+                <MatchContainer />
               </Route>
               <Route path="/">
                 <Redirect to="/" />

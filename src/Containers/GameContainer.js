@@ -11,12 +11,21 @@ class GameContainer extends React.Component {
     static contextType = AuthContext;
 
     render() {
+
+        console.log("GAME PROPS", this.props);
+
         return (
-            <div className="game-container">
-                <GameBoard />
-                <NextPiece />
-                <RemoteGameContainer />
-            </div>
+            <>
+            {
+                this.props.match_users && this.props.match_users.includes(this.context.user.id)
+                ? <div className="game-container">
+                        <GameBoard />
+                        <NextPiece />
+                        <RemoteGameContainer />
+                    </div>
+                : <span>SPECTATOR VIEW</span>
+            }
+            </>
         )
     }
 }

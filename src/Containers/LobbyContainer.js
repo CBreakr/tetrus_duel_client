@@ -1,15 +1,21 @@
 import React from "react";
 
 import createActivePlayersWebsocketConnection from "../ActivePlayersSocket";
-import { getAvailableUsers } from "../requests";
+import { getAvailableUsers, issueChallenge, acceptChallenge, rejectChallenge, cancelChallenge } from "../requests";
 import PlayerDisplay from "../Components/PlayerDisplay";
+
+import { withRouter } from "react-router-dom";
 
 import AuthContext from "../AuthContext";
 
 class LobbyContainer extends React.Component {
 
     state = {
-        players: []
+        players: [],
+        challenges: [],
+        challenge_issued_id: null,
+        challenges_issued_by: [],
+        challenge_accepted: false
     }
 
     static contextType = AuthContext;
@@ -35,19 +41,31 @@ class LobbyContainer extends React.Component {
     */
 
     capture_func = (socket_message) => {
-        console.log("captured", socket_message);
+        console.log("captured", socket_message, socket_message.type);
         switch(socket_message.type){
             case "enter_lobby":
                 this.addPlayerToLobby(socket_message.player);
                 break;
             case "challenge":
+                console.log("challenge detail: ", socket_message.details);
+                this.addChallenge(socket_message.details);
                 break;
             case "reject":
+                console.log("reject");
+                this.removeChallenge(socket_message.details.challenger);
+                break;
+            case "cancel":
+                console.log("cancel");
+                this.removeChallenge(socket_message.details.challenger);
+                break;
+            case "accept":
+                this.processChallengeAcceptance(socket_message.users, socket_message.match_id);
                 break;
             case "remove":
                 this.removePlayersFromLobby(socket_message.users);
                 break;
         }
+        console.log("after switch");
     }
 
     addPlayerToLobby = (player) => {
@@ -67,29 +85,140 @@ class LobbyContainer extends React.Component {
         this.setState({players: copy});
     }
 
-    markPlayerUnavailable = (player) => {
+    addChallenge = (details) => {
+        console.log("DETAILS", details)
+        // {challenger: current_user, challenged: params[:id]}
+        console.log(this.context.user.id, details.challenged);
+        if(this.context.user.id === details.challenged){
+            this.setState({challenges: [...this.state.challenges, details.challenger]});
+        }
 
+        // also mark that a challenge has been issued
+        this.setState({challenges_issued_by: [...this.state.challenges_issued_by, details.challenger.id]});
     }
 
-    markPlayerInactive = (player) => {
+    removeChallenge = (id) => {
 
+        console.log("remove challenge", id);
+
+        // remove from the list of challenges_issued_by
+        // remove from the list of challenges
+        // if matches the current user, remove challenge_issued_id
+        const issued_by_copy = [];
+        const challenge_copy = [];
+        let issued_id = this.state.challenge_issued_id;
+
+        this.state.challenges_issued_by.forEach(by_id => {
+            if(by_id !== id){
+                issued_by_copy.push(by_id);
+            }
+        });
+
+        this.state.challenges.forEach(challenge => {
+            if(challenge.id !== id){
+                challenge_copy.push(challenge);
+            }
+        });
+
+        if(id === this.context.user.id){
+            issued_id = null;
+        }
+
+        this.setState({
+            challenges_issued_by: issued_by_copy,
+            challenges: challenge_copy,
+            challenge_issued_id: issued_id
+        });
     }
 
+    processChallengeAcceptance = (players, match_id) => {
+        // if one of the users matches the current user
+        // then redirect them to the correct match page
+        console.log("process acceptance", players, match_id)
+        if(players.includes(this.context.user.id)){
+            this.props.history.push(`/matches/${match_id}`);
+        }
+    }
+
+    //
+    //
+    //
+
+    triggerIssueChallenge = (id) => {
+        console.log("create challenge", id);
+        issueChallenge(this.context.token, id);
+        this.setState({challenge_issued_id: id});
+    }
+
+    triggerRejectChallenge = (id) => {
+        const challenges_copy = [];
+        this.state.challenges.forEach(challenge => {
+            if(challenge.id !== id){
+                challenges_copy.push(challenge);
+            }
+        });
+        this.setState({challenges: challenges_copy});
+        
+        rejectChallenge(this.context.token, id);
+    }
+
+    triggerCancelChallenge = (id) => {
+        console.log("cancel challenge", id);
+        this.setState({challenge_issued_id: null});
+        cancelChallenge(this.context.token, id);
+    }
+
+    triggerAcceptChallenge = (id) => {
+        // just have to wait for the redirect
+        console.log("accept", id);
+        acceptChallenge(this.context.token, id);
+    }
+
+    //
+    //
+    //
     render(){
 
         console.log("players render", this.state.players);
+        console.log("challenges render", this.state.challenges_issued_by);
 
         return (
             <div>
                 {this.state.players && this.state.players.map(player => {
                     if(player.id !== this.context.user.id){
-                        return <PlayerDisplay key={player.id} {...player} />
+                        return (
+                            <PlayerDisplay key={player.id} 
+                                {...player} /* this has the player's issued_challenege value */
+                                createChallenge={this.triggerIssueChallenge}                                 
+                                cancelChallenge={this.triggerCancelChallenge}
+                                challenge_issued_id={this.state.challenge_issued_id} 
+                                challenges_issued_by={this.state.challenges_issued_by}
+                            />
+                        )
                     }
                     return null;
                 })}
+                {
+                    this.state.challenges.length > 0
+                    ? <>
+                        <h3>Challenges</h3>
+                        {
+                            this.state.challenges.map(challenger => {
+                                return (
+                                    <div key={challenger.id}>
+                                        {challenger.name} - {challenger.rank}
+                                        <button onClick={() => this.triggerAcceptChallenge(challenger.id)}>Accept</button>
+                                        <button onClick={() => this.triggerRejectChallenge(challenger.id)}>Reject</button>
+                                    </div>
+                                )
+                            })
+                        }
+                    </>
+                    : ""
+                }                
             </div>
         );
     }
 }
 
-export default LobbyContainer;
+export default withRouter(LobbyContainer);

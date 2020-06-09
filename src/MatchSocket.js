@@ -43,6 +43,15 @@ const createMatchWebsocketConnection = (match_id, capture_func) => {
     socket.onerror = function(error) {
         console.log('WebSocket Error: ', error);
     };
+
+    //
+    // return the close socket method
+    //
+    return () => {
+        if(socket){
+            socket.close();
+        }
+    }
 }
 
 export default createMatchWebsocketConnection;

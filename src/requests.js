@@ -113,6 +113,11 @@ export const issueChallenge = (token, user_being_challenged_id) => {
     .catch(handleError);
 }
 
+export const cancelChallenge = (token, user_challenging_id) => {
+    return axios.post(`${baseURL}/matches/cancel_challenge`, {id: user_challenging_id}, config(token))
+    .catch(handleError);
+}
+
 export const rejectChallenge = (token, user_challenging_id) => {
     return axios.post(`${baseURL}/matches/reject_challenge`, {id: user_challenging_id}, config(token))
     .catch(handleError);
@@ -142,3 +147,8 @@ export const concedeMatch = (token, match_id, game_id) => {
 //     return axios.patch(`${baseURL}/matches/${match_id}/match_lost`, {}, config(token))
 //     .catch(handleError);
 // }
+
+export const getMatchDetails = (token, path) => {
+    return axios.get(`${baseURL}${path}`, config(token))
+    .catch(handleError);
+}
