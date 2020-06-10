@@ -19,8 +19,7 @@ TETRIS ITSELF
 */
 
 .game-container {
-  display: grid;
-  
+  display: flex;  
 }
 
 .game-board {
@@ -70,4 +69,10 @@ TETRIS ITSELF
   display:flex;
   flex-direction: column;
   align-items: center;
+}
+
+.active-matches-container {
+  border: 1px solid black;
+  padding: 2px;
+  margin: 2px;
 }

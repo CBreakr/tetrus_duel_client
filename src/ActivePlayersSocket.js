@@ -31,7 +31,9 @@ const createActivePlayersWebsocketConnection = (capture_func) => {
         
         console.log("ACTIVE PLAYERS MESSAGE RECEIVED", msg);
 
-        capture_func(msg.message);
+        if(msg && msg.message){
+            capture_func(msg.message);
+        }
     };
 
     socket.onclose = function(event) {

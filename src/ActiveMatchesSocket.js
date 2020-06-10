@@ -31,7 +31,9 @@ const createActiveMatchesWebsocketConnection = (capture_func) => {
 
         console.log("ACTIVE MATCHES MESSAGE RECEIVED", msg);
         
-        capture_func(msg.message);
+        if(msg && msg.message){
+            capture_func(msg.message);
+        }
     };
 
     socket.onclose = function(event) {

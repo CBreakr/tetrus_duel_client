@@ -32,7 +32,9 @@ const createMatchWebsocketConnection = (match_id, capture_func) => {
 
         console.log("MATCH MESSAGE RECEIVED", msg);
 
-        capture_func(msg.message);
+        if(msg && msg.message){
+            capture_func(msg.message);
+        }
     };
 
     socket.onclose = function(event) {

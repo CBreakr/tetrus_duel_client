@@ -6,7 +6,7 @@ class RemoteGameContainer extends React.Component {
     render() {
         return (
             <div className="remote">
-                <GameBoard />
+                <GameBoard is_remote={true} gamestate={this.props.gamestate} game_id={this.props.game_id} />
             </div>
         )
     }

@@ -16,6 +16,8 @@ const s_left_piece = 7;
 const height = 22;
 const width = 10;
 
+let nextRows = 0;
+
 export default class GameBoard extends React.Component {
 
     state = {
@@ -43,12 +45,15 @@ export default class GameBoard extends React.Component {
             [0,0,0,0,0,0,0,0,0,0], 
             [0,0,0,0,0,0,0,0,0,0] 
         ],
+        match_id: null,
+        game_id: null,
         paused: false,
         active: null,
         rotation: 0,
         gameOver: false,
         timer: null,
-        nextPiece: null
+        nextPiece: null,
+        move_number: 0     
     }
 
     //
@@ -254,7 +259,12 @@ export default class GameBoard extends React.Component {
 
         this.clearCompletedLines(copy);
 
-        this.setState({grid: copy, active: null});
+        this.setState({grid: copy, active: null, move_number: this.state.move_number+1}, () => {
+            if(this.props.sendUpdate && typeof this.props.sendUpdate === "function"){
+                console.log("SEND UPDATE");
+                this.props.sendUpdate(this.state);
+            }
+        });
     }
 
     //
@@ -669,7 +679,12 @@ export default class GameBoard extends React.Component {
 
         if(collision){
             clearInterval(this.state.timer);
-            this.setState({gameOver: true, timer: null});
+            this.setState({gameOver: true, timer: null}, () => {
+                if(this.props.matchLost && typeof this.props.matchLost === "function"){
+                    console.log("MATCH LOST");
+                    this.props.sendUpdate(this.state);
+                }
+            });
         }
         else{
             this.setState({grid: copy, active: piece, rotation: 0, nextPiece: next});
@@ -736,6 +751,13 @@ export default class GameBoard extends React.Component {
     //
     //
     //
+    insertNewLines = () => {
+        // push this one off for later
+    }
+
+    //
+    //
+    //
     toggleGame = () => {
         if(this.state.timer){
             clearInterval(this.state.timer);
@@ -754,7 +776,39 @@ export default class GameBoard extends React.Component {
         // https://stackoverflow.com/questions/39135912/react-onkeydown-onkeyup-events-on-non-input-elements
         document.body.addEventListener('keydown', this.handleKeyDown);
         const next = Math.ceil(Math.random()*7);
-        this.setState({nextPiece: next});
+        
+
+        // match_id: null,
+        // game_id: null,
+        
+        if(this.props.match_id && this.props.game_id){
+            this.setState({
+                match_id: this.props.match_id,
+                game_id: this.game_id,
+                nextPiece: next
+            });
+        }
+        else{
+            this.setState({nextPiece: next});   
+        }
+
+        if(!this.props.solo && !this.props.is_remote){
+            // just start it immediately
+            this.toggleGame();
+        }
+    }
+
+    //
+    //
+    //
+    componentDidUpdate(prevProps, prevState){
+        if(this.props.move_number != prevProps.move_number){
+            this.setState({
+                move_number: this.props.move_number,
+                grid: this.props.board_state,
+                gameOver: this.props.is_finished
+            });
+        }
     }
     
     //
@@ -802,39 +856,47 @@ export default class GameBoard extends React.Component {
                             </tbody>
                         </table>
                         <br />
-                        <button onClick={this.toggleGame}>
-                            {
-                                this.state.timer 
-                                ? "Pause Game"
-                                : "Start Game"
-                            }
-                        </button>
-                    </div>
-                    <div className="next-piece">
-                        <table className="game-board">
-                            <tbody>
+                        {
+                            this.props.solo
+                            ? <button onClick={this.toggleGame}>
                                 {
-                                    this.getNextPieceCode().map((row, row_index) => {
-                                        return (<tr key={`r_${row_index}`}>
+                                    this.state.timer 
+                                    ? "Pause Game"
+                                    : "Start Game"
+                                }
+                            </button>
+                            : ""
+                        }                        
+                    </div>
+                    {
+                        !this.props.remote
+                        ? <div className="next-piece">
+                            <table className="game-board">
+                                <tbody>
                                     {
-                                        row.map((cell, cell_index) => {
-                                            const cell_value = row[cell_index];
-                                            let classesForCell = "";
-                                            if(cell_value === 0){
-                                                classesForCell = "empty";
-                                            }
-                                            else if(cell_value === 2){
-                                                classesForCell = "active";
-                                            }
-                                            return <td className={`game-cell ${classesForCell}`} key={`c_${cell_index}`}></td>
+                                        this.getNextPieceCode().map((row, row_index) => {
+                                            return (<tr key={`r_${row_index}`}>
+                                                {
+                                                    row.map((cell, cell_index) => {
+                                                        const cell_value = row[cell_index];
+                                                        let classesForCell = "";
+                                                        if(cell_value === 0){
+                                                            classesForCell = "empty";
+                                                        }
+                                                        else if(cell_value === 2){
+                                                            classesForCell = "active";
+                                                        }
+                                                        return <td className={`game-cell ${classesForCell}`} key={`c_${cell_index}`}></td>
+                                                    })
+                                                }
+                                            </tr>)
                                         })
                                     }
-                                </tr>)
-                                    })
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+                                </tbody>
+                            </table>
+                        </div>
+                        : ""
+                    }
                 </div>                
             </div>
         )

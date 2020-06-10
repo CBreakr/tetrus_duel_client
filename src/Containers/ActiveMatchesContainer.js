@@ -63,18 +63,19 @@ class ActiveMatchesContainer extends React.Component {
 
     render() {
         return (
-            <>
-            {
-                this.state.matches && this.state.matches.map(match => {
-                    return (
-                        <GameMatchupContainer 
-                            key={match.id}
-                            {...match}
-                        />
-                    )
-                })
-            }
-            </>
+            <div className="active-matches-container">
+                <h3>Active Matches</h3>
+                {
+                    this.state.matches && this.state.matches.map(match => {
+                        return (
+                            <GameMatchupContainer 
+                                key={match.id}
+                                {...match}
+                            />
+                        )
+                    })
+                }
+            </div>
         );
     }
 }

@@ -16,7 +16,7 @@ import AuthContext from "./AuthContext";
 import UserActionContainer from "./Containers/UserActionContainer";
 import MainContainer from './Containers/MainContainer';
 import MatchContainer from './Containers/MatchContainer';
-
+import GameBoard from "./Components/GameBoard";
 
 import createActiveMatchesWebsocketConnection from "./ActiveMatchesSocket";
 import createActivePlayersWebsocketConnection from "./ActivePlayersSocket";
@@ -272,7 +272,7 @@ const WithContainer = (props) => {
         ? <>
             <Switch>
               <Route path="/games/:id">
-                <MatchContainer />
+                <GameBoard solo={true} />
               </Route>
               <Route path="/matches/:id">
                 <MatchContainer />
