@@ -1,13 +1,15 @@
 import React from "react";
 
+import RankDisplay from "./RankDisplay";
+
 class PlayerDisplay extends React.Component {
 
     render() {
-        console.log("Player Props", this.props.issued_challenge, this.props.challenge_issued_id);
+        console.log("Player Props", this.props, this.props.issued_challenge, this.props.challenge_issued_id);
 
         return (
             <div>
-                Player: {this.props.name} - {this.props.rank}
+                Player: <RankDisplay {...this.props} />
                 {
                     /* both sides must be challenge-free */
                     !this.props.issued_challenge 

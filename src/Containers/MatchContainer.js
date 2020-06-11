@@ -4,7 +4,13 @@ import createMatchWebsocketConnection from "../MatchSocket";
 
 import { withRouter } from "react-router-dom";
 
-import { getMatchDetails, acceptMatchHandshake } from "../requests";
+import { 
+        getMatchDetails, 
+        acceptMatchHandshake, 
+        updateMatch, 
+        enterLobby, 
+        concedeMatch 
+    } from "../requests";
 
 import Dashboard from "../Components/Dashboard";
 import GameContainer from "./GameContainer";
@@ -74,7 +80,7 @@ class MatchContainer extends React.Component {
             case "match_start":
                 this.setState({completed_handshakes: true});
                 break;
-            case "match_over":
+            case "match_ended":
                 // hmm, what do I do here?
                 console.log("THE MATCH IS OVER!!!!", message.winner_id)
                 this.setState({winner_id: message.winner_id});
@@ -82,12 +88,17 @@ class MatchContainer extends React.Component {
             case "match_update":
                 console.log("MATCH UPDATE", message.gamestate)
                 const currentGameId = this.getCurrentGameId();
+
+                console.log("current game id", currentGameId);
                 
                 if(currentGameId && currentGameId !== message.game_id){
-                    if(message.game_id === this.state.game1_id){
+                    console.log("opponent game match");
+                    if(message.gamestate.game_id === this.state.game1_id){
+                        console.log("update game 1", message.gamestate);
                         this.setState({user1_gamestate: message.gamestate});
                     }
-                    else{
+                    else if(message.gamestate.game_id === this.state.game2_id){
+                        console.log("update game 2", message.gamestate);
                         this.setState({user2_gamestate: message.gamestate});
                     }
                 }
@@ -96,10 +107,11 @@ class MatchContainer extends React.Component {
     }
 
     getCurrentGameId = () => {
+        console.log("get curretn game id", this.context.user.id, this.state.user1.id, this.state.user2.id);
         if(this.context.user.id === this.state.user1.id){
             return this.state.game1_id;
         }
-        else if(this.context.user === this.state.user2.id) {
+        else if(this.context.user.id === this.state.user2.id) {
             return this.state.game2_id;
         }
 
@@ -115,8 +127,31 @@ class MatchContainer extends React.Component {
 
     sendUpdate = (gamestate) => {
         console.log("SEND UPDATE", gamestate);
+        updateMatch(this.context.token, this.state.match_id, gamestate)
+        .then(res => {
+            // is there anything to do here?
+            // I think this is just up the the sockets now
+        });
     }
 
+    returnToLobby = () => {
+        enterLobby(this.context.token);
+        this.props.history.push("/");
+    }
+
+    concede = () => {
+        const game_id = this.getCurrentGameId();
+
+        if(game_id){
+            concedeMatch(this.context.token, this.state.match_id, game_id);
+        }
+    }
+
+    //
+    //
+    //
+    //
+    //
     render(){
 
         console.log("match container state", this.state);
@@ -126,15 +161,44 @@ class MatchContainer extends React.Component {
             {
                 this.state.user1 && this.state.user2
                 ? <div className="match-container">
-                    <Dashboard user1={this.state.user1} user2={this.state.user2} winner={this.state.winner} />
+                    <Dashboard 
+                        user1={this.state.user1} 
+                        user2={this.state.user2} 
+                        winner={this.state.winner} 
+                        concede={this.concede}
+                    />
                     {
                         !this.state.my_handshake
                         ? <button onClick={this.handshake}>Ready</button>
                         : <>
                         {
-                            !this.state.completed_handshakes
-                            ? <span>Waiting for opponent...</span>
-                            : <GameContainer {...this.state} sendUpdate={this.sendUpdate} />
+                            !this.state.winner_id
+                            ? <> {
+                                !this.state.completed_handshakes
+                                ? <span>Waiting for opponent...</span>
+                                : <GameContainer 
+                                    {...this.state} 
+                                    sendUpdate={this.sendUpdate} 
+                                />
+                            }
+                            </>
+                            : <>
+                            {
+                                this.state.winner_id === this.context.user.id
+                                ? (
+                                    <div>
+                                        <span className="win">YOU WIN</span>
+                                        <button onClick={this.returnToLobby}>Return to Lobby</button>
+                                    </div>
+                                )
+                                : (
+                                    <div>
+                                        <span className="lose">YOU LOSE</span>
+                                        <button onClick={this.returnToLobby}>Return To Lobby</button>
+                                    </div>
+                                )
+                            }
+                            </>
                         }
                         </>
                     }

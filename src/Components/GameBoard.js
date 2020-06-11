@@ -45,7 +45,6 @@ export default class GameBoard extends React.Component {
             [0,0,0,0,0,0,0,0,0,0], 
             [0,0,0,0,0,0,0,0,0,0] 
         ],
-        match_id: null,
         game_id: null,
         paused: false,
         active: null,
@@ -236,6 +235,7 @@ export default class GameBoard extends React.Component {
     //
     nextStep = () => {
         if(this.state.active){
+            // for now, for the sake of testing
             this.moveDown();
         }
         else{
@@ -261,7 +261,7 @@ export default class GameBoard extends React.Component {
 
         this.setState({grid: copy, active: null, move_number: this.state.move_number+1}, () => {
             if(this.props.sendUpdate && typeof this.props.sendUpdate === "function"){
-                console.log("SEND UPDATE");
+                console.log("SEND UPDATE", this.state);
                 this.props.sendUpdate(this.state);
             }
         });
@@ -680,8 +680,8 @@ export default class GameBoard extends React.Component {
         if(collision){
             clearInterval(this.state.timer);
             this.setState({gameOver: true, timer: null}, () => {
-                if(this.props.matchLost && typeof this.props.matchLost === "function"){
-                    console.log("MATCH LOST");
+                if(this.props.sendUpdate && typeof this.props.sendUpdate === "function"){
+                    console.log("MATCH LOST", this.state);
                     this.props.sendUpdate(this.state);
                 }
             });
@@ -764,7 +764,7 @@ export default class GameBoard extends React.Component {
             this.setState({timer: null});
         }
         else{
-            this.setState({timer: setInterval(this.nextStep, 700)});
+            this.setState({timer: setInterval(this.nextStep, 500)});
         }
     }
 
@@ -777,14 +777,13 @@ export default class GameBoard extends React.Component {
         document.body.addEventListener('keydown', this.handleKeyDown);
         const next = Math.ceil(Math.random()*7);
         
-
-        // match_id: null,
         // game_id: null,
+
+        console.log("the props passed to the GameBoard", this.props);
         
-        if(this.props.match_id && this.props.game_id){
+        if(this.props.game_id){            
             this.setState({
-                match_id: this.props.match_id,
-                game_id: this.game_id,
+                game_id: this.props.game_id,
                 nextPiece: next
             });
         }
@@ -802,12 +801,21 @@ export default class GameBoard extends React.Component {
     //
     //
     componentDidUpdate(prevProps, prevState){
-        if(this.props.move_number != prevProps.move_number){
-            this.setState({
-                move_number: this.props.move_number,
-                grid: this.props.board_state,
-                gameOver: this.props.is_finished
-            });
+        console.log(this.props.gamestate, prevProps.gamestate);
+        if(this.props.gamestate && this.props.gamestate.game_id === this.state.game_id){
+            console.log("we have a gamestate", !prevProps.gamestate);
+            if(!prevProps.gamestate
+                || 
+                this.props.gamestate.move_number != prevProps.gamestate.move_number
+            ){
+                console.log("set the gamestate for the board");
+
+                this.setState({
+                    move_number: this.props.gamestate.move_number,
+                    grid: this.props.gamestate.grid,
+                    gameOver: this.props.gamestate.gameOver
+                });
+            }
         }
     }
     
@@ -816,6 +824,12 @@ export default class GameBoard extends React.Component {
     //
     componentWillUnmount(){
         document.body.removeEventListener('keydown', this.handleKeyDown);
+
+        // clear the timer on unmount
+        if(this.state.timer){
+            clearInterval(this.state.timer);
+            this.setState({timer: null});
+        }
     }
 
     //
@@ -869,7 +883,7 @@ export default class GameBoard extends React.Component {
                         }                        
                     </div>
                     {
-                        !this.props.remote
+                        !this.props.is_remote
                         ? <div className="next-piece">
                             <table className="game-board">
                                 <tbody>

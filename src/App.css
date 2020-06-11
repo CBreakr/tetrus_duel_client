@@ -41,6 +41,13 @@ TETRIS ITSELF
   margin: 0;
 }
 
+.next-piece .game-cell {
+  width: 22px;
+  height: 22px;
+  border: 1px solid #ddd;
+  margin: 0;
+}
+
 .empty {
   background-color: white;
 }
@@ -75,4 +82,20 @@ TETRIS ITSELF
   border: 1px solid black;
   padding: 2px;
   margin: 2px;
+}
+
+.win {
+  background-color: lightgreen;
+  color: green;
+  border: 1px solid green;
+  margin: 2px;
+  padding: 4px;
+}
+
+.lose {
+  background-color: lightpink;
+  color: red;
+  border: 1px solid red;
+  margin: 2px;
+  padding: 4px;
 }

@@ -18,13 +18,7 @@ import MainContainer from './Containers/MainContainer';
 import MatchContainer from './Containers/MatchContainer';
 import GameBoard from "./Components/GameBoard";
 
-import createActiveMatchesWebsocketConnection from "./ActiveMatchesSocket";
-import createActivePlayersWebsocketConnection from "./ActivePlayersSocket";
-import createMatchWebsocketConnection from "./MatchSocket";
-
-
-// const webSocketUrl = 'ws://localhost:3000/cable';
-let socket = null;
+import RankDisplay from "./Components/RankDisplay";
 
 class App extends React.Component {
 
@@ -81,118 +75,6 @@ class App extends React.Component {
     // createMatchWebsocketConnection(1, this.capture_func);
   }
 
-  dataTest = () => {
-    requests.getAllData()
-    .then(res => {
-      console.log("ALL DATA", res.data);
-    })
-  }
-
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-
-  createNotificationWebsocketConnection = () => {    
-    // Creates the new websocket connection
-    socket = new WebSocket(requests.webSocketUrl);
-
-    /*
-    commentSocket.onopen = function(event) {
-        console.log('COMMENT WebSocket is connected.', commentSocket);
-
-        const msg = {
-            command: 'subscribe',
-            identifier: JSON.stringify({
-                id: questionId,
-                channel: 'QuestionChannel'
-            }),
-        };
-
-        commentSocket.send(JSON.stringify(msg));
-    };
-    */
-
-    // When the connection is 1st created, this code runs subscribing the clien to a specific chatroom stream in the ChatRoomChannel
-    socket.onopen = function(event) {
-        console.log('WebSocket is connected.', socket);
-
-        const msg = {
-            command: 'subscribe',
-            identifier: JSON.stringify({
-                channel: 'DefaultChannel'
-            }),
-        };
-
-        socket.send(JSON.stringify(msg));
-    };
-    
-    // When the connection is closed, this code is run
-    socket.onclose = function(event) {
-        console.log('WebSocket is closed.');
-        // returnToMainPage();
-    };
-
-    // When a message is received through the websocket, this code is run
-    socket.onmessage = function(event) {            
-        const response = event.data;
-        const msg = JSON.parse(response);
-
-        // Ignores pings
-        if (msg.type === "ping" || msg.type === "confirm_subscription" || msg.type === "welcome") {
-            return;
-        } 
-        
-        // Renders any newly created messages onto the page
-        if (msg.message) {
-            console.log("from broadcast", msg);
-        }
-      };
-      
-      // When an error occurs through the websocket connection, this code is run printing the error message
-      socket.onerror = function(error) {
-          console.log('WebSocket Error: ', error);
-      };
-  }
-
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-
-  capture_func = (message) => {
-    console.log("captured", message);
-  }
-
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-
   setCurrentUser = (data, callback) => {    
 
     this.setState({loaded: true});
@@ -232,19 +114,10 @@ class App extends React.Component {
     return (
       <AuthContext.Provider value={this.state}>
         {
-          this.state.loaded
-          ? <span>loaded</span>
-          : <span>NOT loaded</span>
-        }
-        {
           this.state.user
-          ? <span>We have a user {this.state.user.name} <button onClick={this.logout}>Logout</button></span>
+          ? <span><RankDisplay {...this.state.user} /> <button onClick={this.logout}>Logout</button></span>
           : ""
         }
-        <button onClick={this.dataTest}>Test</button>
-        <br />
-        <br />
-        <br />
         <br />
         <Switch>
             <Route exact path="/">

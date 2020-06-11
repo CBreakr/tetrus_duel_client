@@ -1,6 +1,6 @@
 import React from "react";
 
-import PlayerDisplay from "../Components/PlayerDisplay";
+import RankDisplay from "../Components/RankDisplay";
 
 class GameMatchupContainer extends React.Component {
     render() {
@@ -8,7 +8,11 @@ class GameMatchupContainer extends React.Component {
             <div>
                 {
                     this.props.user1 && this.props.user2
-                    ? <span>{`${this.props.user1.name}(${this.props.user1.rank}) VS ${this.props.user2.name}(${this.props.user2.rank})`}</span>
+                    ? (<span>
+                        <RankDisplay {...this.props.user1} /> 
+                        &nbsp;VS&nbsp; 
+                        <RankDisplay {...this.props.user2} />
+                    </span>)
                     : ""
                 }
             </div>
