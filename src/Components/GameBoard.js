@@ -22,6 +22,10 @@ const width = 10;
 
 let nextRows = 0;
 
+let timeout = 700;
+let timer = null;
+const rate = 0.99;
+
 class GameBoard extends React.Component {
 
     state = {
@@ -52,9 +56,10 @@ class GameBoard extends React.Component {
         active: null,
         rotation: 0,
         gameOver: false,
-        timer: null,
+        // timer: null,
         nextPiece: null,
-        move_number: 0     
+        move_number: 0,
+        buttonText: "Start"
     }
 
     static contextType = AuthContext;
@@ -91,7 +96,11 @@ class GameBoard extends React.Component {
     moveDown = () => {
 
         // no motion allowed when paused
-        if(!this.state.timer){
+        // if(!this.state.timer){
+        //     return;
+        // }
+
+        if(!timer){
             return;
         }
 
@@ -113,7 +122,7 @@ class GameBoard extends React.Component {
             this.setState({grid:copy});
         }
         else{
-            this.setGridAllInactve();
+            this.setGridAllInactive();
         }
     }
 
@@ -184,7 +193,11 @@ class GameBoard extends React.Component {
     checkLeft = () => {
 
         // no motion allowed when paused
-        if(!this.state.timer){
+        // if(!this.state.timer){
+        //     return false;
+        // }
+
+        if(!timer){
             return false;
         }
 
@@ -212,7 +225,11 @@ class GameBoard extends React.Component {
     checkRight = () => {
 
         // no motion allowed when paused
-        if(!this.state.timer){
+        // if(!this.state.timer){
+        //     return false;
+        // }
+
+        if(!timer){
             return false;
         }
 
@@ -243,14 +260,18 @@ class GameBoard extends React.Component {
             this.moveDown();
         }
         else{
+            timeout *= rate;
+            console.log("TIMEOUT", timeout);
             this.generateNewPiece();
         }
+
+        timer = setTimeout(this.nextStep, timeout);
     }
 
     //
     //
     //
-    setGridAllInactve = () => {
+    setGridAllInactive = () => {
 
         const copy = [...this.state.grid];
         copy.forEach((row, row_index) => {
@@ -371,7 +392,14 @@ class GameBoard extends React.Component {
     //
     //
     checkRotation = () => {
-        if(this.state.timer){
+        // if(this.state.timer){
+        //     return true;
+        // }
+        // else{
+        //     return false;
+        // }
+
+        if(timer){
             return true;
         }
         else{
@@ -638,7 +666,6 @@ class GameBoard extends React.Component {
         coords.forEach(rowcol => {
             const row = rowcol[0];
             const col = rowcol[1];
-            console.log(row, col);
             const outOfbounds = (row < 0 || col < 0 || row >= height || col >= width);
             if (outOfbounds || grid[row][col] === 1){
                 ret = false;
@@ -682,8 +709,11 @@ class GameBoard extends React.Component {
         }
 
         if(collision){
-            clearInterval(this.state.timer);
-            this.setState({gameOver: true, timer: null}, () => {
+            // clearInterval(this.state.timer);
+            clearTimeout(timer);
+            timer = null;
+            // this.setState({gameOver: true, timer: null}, () => {
+            this.setState({gameOver: true}, () => {
                 if(this.props.sendUpdate && typeof this.props.sendUpdate === "function"){
                     console.log("MATCH LOST", this.state);
                     this.props.sendUpdate(this.state);
@@ -763,12 +793,22 @@ class GameBoard extends React.Component {
     //
     //
     toggleGame = () => {
-        if(this.state.timer){
-            clearInterval(this.state.timer);
-            this.setState({timer: null});
+        // if(this.state.timer){
+        //     clearInterval(this.state.timer);
+        //     this.setState({timer: null});
+        // }
+        // else{
+        //     this.setState({timer: setInterval(this.nextStep, 500)});
+        // }
+
+        if(timer){
+            clearTimeout(timer);
+            timer = null;
+            this.setState({buttonText:"Start"});
         }
         else{
-            this.setState({timer: setInterval(this.nextStep, 500)});
+            timer = setTimeout(this.nextStep, timeout);
+            this.setState({buttonText:"Pause"});
         }
     }
 
@@ -805,7 +845,7 @@ class GameBoard extends React.Component {
     //
     //
     componentDidUpdate(prevProps, prevState){
-        console.log(this.props.gamestate, prevProps.gamestate);
+        // console.log(this.props.gamestate, prevProps.gamestate);
         if(this.props.gamestate && this.props.gamestate.game_id === this.state.game_id){
             console.log("we have a gamestate", !prevProps.gamestate);
             if(!prevProps.gamestate
@@ -830,9 +870,14 @@ class GameBoard extends React.Component {
         document.body.removeEventListener('keydown', this.handleKeyDown);
 
         // clear the timer on unmount
-        if(this.state.timer){
-            clearInterval(this.state.timer);
-            this.setState({timer: null});
+        // if(this.state.timer){
+        //     clearInterval(this.state.timer);
+        //     this.setState({timer: null});
+        // }
+
+        if(timer){
+            clearTimeout(timer);
+            timer = null;
         }
     }
 
@@ -842,10 +887,16 @@ class GameBoard extends React.Component {
     returnToLobby = () => {
         enterLobby(this.context.token);
         // be sure to kill the timer
-        if(this.state.timer){
-            clearInterval(this.state.timer);
-            this.setState({timer: null});
+        // if(this.state.timer){
+        //     clearInterval(this.state.timer);
+        //     this.setState({timer: null});
+        // }
+
+        if(timer){
+            clearTimeout(timer);
+            timer = null;
         }
+
         this.props.history.push("/");
     }
 
@@ -892,9 +943,7 @@ class GameBoard extends React.Component {
                             ? <> 
                             <button onClick={this.toggleGame}>
                                 {
-                                    this.state.timer 
-                                    ? "Pause Game"
-                                    : "Start Game"
+                                    `${this.state.buttonText} Game`
                                 }
                             </button>
                             <button onClick={this.returnToLobby}>Return To Lobby</button>
@@ -912,6 +961,10 @@ class GameBoard extends React.Component {
                                             return (<tr key={`r_${row_index}`}>
                                                 {
                                                     row.map((cell, cell_index) => {
+                                                        if(cell_index < 2 || cell_index > (width-3)){
+                                                            return;
+                                                        }
+                                                        
                                                         const cell_value = row[cell_index];
                                                         let classesForCell = "";
                                                         if(cell_value === 0){
