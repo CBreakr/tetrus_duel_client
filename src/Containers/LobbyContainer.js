@@ -3,6 +3,7 @@ import React from "react";
 import createActivePlayersWebsocketConnection from "../ActivePlayersSocket";
 import { getAvailableUsers, issueChallenge, acceptChallenge, rejectChallenge, cancelChallenge } from "../requests";
 import PlayerDisplay from "../Components/PlayerDisplay";
+import RankDisplay from "../Components/RankDisplay";
 
 import { withRouter } from "react-router-dom";
 
@@ -82,6 +83,7 @@ class LobbyContainer extends React.Component {
                 copy.push(player);
             }
         });
+        this.removeChallengeByPlayers(player_ids);
         this.setState({players: copy});
     }
 
@@ -97,9 +99,20 @@ class LobbyContainer extends React.Component {
         this.setState({challenges_issued_by: [...this.state.challenges_issued_by, details.challenger.id]});
     }
 
-    removeChallenge = (id) => {
+    removeChallengeByPlayers = (player_ids) => {
+        console.log("STATE CHALLENGES", player_ids, this.state.challenges);
+        this.removeChallenge(player_ids);
+    }
 
-        console.log("remove challenge", id);
+    removeChallenge = (player_ids) => {
+
+        let ids = player_ids;
+
+        console.log("remove challenge", ids);
+
+        if(!Array.isArray(ids)){
+            ids = [ids];
+        }
 
         // remove from the list of challenges_issued_by
         // remove from the list of challenges
@@ -109,18 +122,18 @@ class LobbyContainer extends React.Component {
         let issued_id = this.state.challenge_issued_id;
 
         this.state.challenges_issued_by.forEach(by_id => {
-            if(by_id !== id){
+            if(!ids.includes(by_id)){
                 issued_by_copy.push(by_id);
             }
         });
 
         this.state.challenges.forEach(challenge => {
-            if(challenge.id !== id){
+            if(!ids.includes(challenge.id)){
                 challenge_copy.push(challenge);
             }
         });
 
-        if(id === this.context.user.id){
+        if(ids.includes(this.context.user.id)){
             issued_id = null;
         }
 
@@ -206,7 +219,7 @@ class LobbyContainer extends React.Component {
                             this.state.challenges.map(challenger => {
                                 return (
                                     <div key={challenger.id}>
-                                        {challenger.name} - {challenger.rank}
+                                        <RankDisplay {...challenger} />
                                         <button onClick={() => this.triggerAcceptChallenge(challenger.id)}>Accept</button>
                                         <button onClick={() => this.triggerRejectChallenge(challenger.id)}>Reject</button>
                                     </div>

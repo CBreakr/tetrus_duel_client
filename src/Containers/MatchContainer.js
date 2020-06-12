@@ -14,6 +14,7 @@ import {
 
 import Dashboard from "../Components/Dashboard";
 import GameContainer from "./GameContainer";
+import SpectatorContainer from "./SpectatorContainer";
 
 import AuthContext from "../AuthContext";
 
@@ -160,6 +161,8 @@ class MatchContainer extends React.Component {
             <>
             {
                 this.state.user1 && this.state.user2
+                && (this.context.user.id === this.state.user1.id
+                    || this.context.user.id === this.state.user2.id)
                 ? <div className="match-container">
                     <Dashboard 
                         user1={this.state.user1} 
@@ -203,7 +206,15 @@ class MatchContainer extends React.Component {
                         </>
                     }
                 </div>
-                : <span>LOADING...</span>
+                : <>
+                    {
+                        this.state.user1 && this.state.user2
+                        ? <SpectatorContainer {...this.state} />
+                        : <span>LOADING...</span>
+                    }
+                </>
+                
+                
             }
             </>
         );

@@ -1,5 +1,9 @@
 import React from "react";
 
+import { enterLobby } from "../requests";
+import { withRouter } from "react-router-dom";
+import AuthContext from "../AuthContext";
+
 const left_key = 37;
 const up_key = 38;
 const right_key = 39;
@@ -13,17 +17,15 @@ const l_left_piece = 5;
 const s_right_piece = 6;
 const s_left_piece = 7;
 
-const height = 22;
+const height = 20;
 const width = 10;
 
 let nextRows = 0;
 
-export default class GameBoard extends React.Component {
+class GameBoard extends React.Component {
 
     state = {
         grid: [
-            [0,0,0,0,0,0,0,0,0,0], 
-            [0,0,0,0,0,0,0,0,0,0], 
             [0,0,0,0,0,0,0,0,0,0], 
             [0,0,0,0,0,0,0,0,0,0], 
             [0,0,0,0,0,0,0,0,0,0], 
@@ -54,6 +56,8 @@ export default class GameBoard extends React.Component {
         nextPiece: null,
         move_number: 0     
     }
+
+    static contextType = AuthContext;
 
     //
     //
@@ -835,6 +839,14 @@ export default class GameBoard extends React.Component {
     //
     //
     //
+    returnToLobby = () => {
+        enterLobby(this.context.token);
+        this.props.history.push("/");
+    }
+
+    //
+    //
+    //
     render(){
         return (
             <div>
@@ -872,13 +884,16 @@ export default class GameBoard extends React.Component {
                         <br />
                         {
                             this.props.solo
-                            ? <button onClick={this.toggleGame}>
+                            ? <> 
+                            <button onClick={this.toggleGame}>
                                 {
                                     this.state.timer 
                                     ? "Pause Game"
                                     : "Start Game"
                                 }
                             </button>
+                            <button onClick={this.returnToLobby}>Return To Lobby</button>
+                            </>
                             : ""
                         }                        
                     </div>
@@ -916,3 +931,5 @@ export default class GameBoard extends React.Component {
         )
     }
 }
+
+export default withRouter(GameBoard);

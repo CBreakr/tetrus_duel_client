@@ -50,10 +50,13 @@ class ActiveMatchesContainer extends React.Component {
     }
 
     removeMatch = (match_id) => {
+        console.log("remove match:", match_id);
+        console.log("all matches", this.state.matches);
         const copy = [];
 
         this.state.matches.forEach(match => {
-            if(match.id !== match_id){
+            console.log("match check", match.id, match_id);
+            if(match.match_id !== match_id){
                 copy.push(match);
             }
         });

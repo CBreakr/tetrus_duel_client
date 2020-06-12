@@ -24,7 +24,11 @@ class Dashboard extends React.Component {
                         <RankDisplay {...this.props.user2} />
                     </p>
                 </div>
-                <button onClick={this.props.concede}>Concede</button>
+                {
+                    !this.props.spectator_view
+                    ? <button onClick={this.props.concede}>Concede</button>
+                    : ""
+                }
             </div>
         );
     }

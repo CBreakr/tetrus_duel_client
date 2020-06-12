@@ -9,9 +9,9 @@ class GameMatchupContainer extends React.Component {
                 {
                     this.props.user1 && this.props.user2
                     ? (<span>
-                        <RankDisplay {...this.props.user1} /> 
+                        <RankDisplay key={this.props.user1.id} {...this.props.user1} /> 
                         &nbsp;VS&nbsp; 
-                        <RankDisplay {...this.props.user2} />
+                        <RankDisplay key={this.props.user2.id} {...this.props.user2} />
                     </span>)
                     : ""
                 }
