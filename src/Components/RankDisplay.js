@@ -9,7 +9,12 @@ const RankDisplay = (props) => {
         {
             props
             ? <span className="user-display">
-                {`${props.name}(${props.rank})`}
+                {props.name}
+                {
+                    Number.isInteger(props.rank)
+                    ? `(${props.rank})`
+                    : ""
+                }
             </span>
             : ""
         }

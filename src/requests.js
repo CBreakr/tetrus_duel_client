@@ -64,6 +64,11 @@ export const logoutUser = (token) => {
     .catch(handleError);
 }
 
+export const getUserDetails = (token, user_id) => {
+    return axios.get(`${baseURL}/users/${user_id}`, config(token))
+    .catch(handleError);
+}
+
 export const getAllData = () => {
     return axios.get(`${baseURL}/all`)
     .catch(handleError);

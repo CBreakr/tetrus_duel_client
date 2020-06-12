@@ -20,6 +20,8 @@ import GameBoard from "./Components/GameBoard";
 
 import RankDisplay from "./Components/RankDisplay";
 
+import { getUserDetails } from "./requests";
+
 class App extends React.Component {
 
   state = {
@@ -28,7 +30,8 @@ class App extends React.Component {
     loginMessage: "",
     registerMessage: "",
     loaded: false,
-    all: null
+    all: null,
+    fetchUserDetails: this.fetchUserDetails
   }
 
   componentDidMount(){
@@ -93,6 +96,7 @@ class App extends React.Component {
       localStorage.setItem('__tetris_duel_token_user_name__', data.name);
       localStorage.setItem('__tetris_duel_token_jwt__', data.jwt);
 
+      this.fetchUserDetails();
     }
     else{      
       this.setState({user: null, token: null});
@@ -107,6 +111,14 @@ class App extends React.Component {
       localStorage.removeItem('__tetris_duel_token_user_id__');
       localStorage.removeItem('__tetris_duel_token_user_name__');
       localStorage.removeItem('__tetris_duel_token_jwt__');
+    });
+  }
+
+  fetchUserDetails = () => {
+    getUserDetails(this.state.token, this.state.user.id)
+    .then(res => {
+      console.log("USER DETAILS", res.data);
+      this.setState({user: res.data});
     });
   }
 

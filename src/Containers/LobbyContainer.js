@@ -91,7 +91,21 @@ class LobbyContainer extends React.Component {
 
     addPlayerToLobby = (player) => {
         console.log("add player to lobby", player);
-        this.setState({players: [...this.state.players, player]});
+        let found = false;
+        
+        const copy = this.state.players.map(p => {
+            if(player.id === p.id){
+                found = true;
+                return player;
+            }
+            else{
+                return p;
+            }
+        });
+        
+        !found && copy.push(player);
+
+        this.setState({players: copy});
     }
 
     removePlayersFromLobby = (player_ids) => {
