@@ -841,6 +841,11 @@ class GameBoard extends React.Component {
     //
     returnToLobby = () => {
         enterLobby(this.context.token);
+        // be sure to kill the timer
+        if(this.state.timer){
+            clearInterval(this.state.timer);
+            this.setState({timer: null});
+        }
         this.props.history.push("/");
     }
 

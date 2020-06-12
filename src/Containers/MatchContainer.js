@@ -30,7 +30,8 @@ class MatchContainer extends React.Component {
         user2_gamestate: null,
         winner_id: null,
         my_handshake: false,
-        completed_handshakes: false
+        completed_handshakes: false,
+        closeSocket: null
     }
 
     static contextType = AuthContext;
@@ -64,9 +65,18 @@ class MatchContainer extends React.Component {
                 winner_id: res.data.winner_id
             }, () => {
                 console.log("create match websocket connection");
-                createMatchWebsocketConnection(this.state.match_id, this.capture_func);
+                const closeSocket = createMatchWebsocketConnection(this.state.match_id, this.capture_func);
+                this.setState({closeSocket});
             })
         });        
+    }
+
+    componentWillUnmount(){
+        console.log("UNMOUNT Match");
+        if(this.state.closeSocket){
+            console.log("do we have the close function");
+            this.state.closeSocket();
+        }
     }
 
     /*
@@ -92,17 +102,27 @@ class MatchContainer extends React.Component {
 
                 console.log("current game id", currentGameId);
                 
-                if(currentGameId && currentGameId !== message.game_id){
-                    console.log("opponent game match");
-                    if(message.gamestate.game_id === this.state.game1_id){
-                        console.log("update game 1", message.gamestate);
-                        this.setState({user1_gamestate: message.gamestate});
-                    }
-                    else if(message.gamestate.game_id === this.state.game2_id){
-                        console.log("update game 2", message.gamestate);
-                        this.setState({user2_gamestate: message.gamestate});
-                    }
+                // if(currentGameId && currentGameId !== message.game_id){
+                //     console.log("opponent game match");
+                //     if(message.gamestate.game_id === this.state.game1_id){
+                //         console.log("update game 1", message.gamestate);
+                //         this.setState({user1_gamestate: message.gamestate});
+                //     }
+                //     else if(message.gamestate.game_id === this.state.game2_id){
+                //         console.log("update game 2", message.gamestate);
+                //         this.setState({user2_gamestate: message.gamestate});
+                //     }
+                // }
+
+                if(message.gamestate.game_id === this.state.game1_id){
+                    console.log("update game 1", message.gamestate);
+                    this.setState({user1_gamestate: message.gamestate});
                 }
+                else if(message.gamestate.game_id === this.state.game2_id){
+                    console.log("update game 2", message.gamestate);
+                    this.setState({user2_gamestate: message.gamestate});
+                }
+
                 break;
         }
     }
@@ -169,6 +189,7 @@ class MatchContainer extends React.Component {
                         user2={this.state.user2} 
                         winner={this.state.winner} 
                         concede={this.concede}
+                        completed_handshakes={this.state.completed_handshakes}
                     />
                     {
                         !this.state.my_handshake

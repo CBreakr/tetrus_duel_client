@@ -99,3 +99,7 @@ TETRIS ITSELF
   margin: 2px;
   padding: 4px;
 }
+
+.spectator-container {
+  display: flex;
+}

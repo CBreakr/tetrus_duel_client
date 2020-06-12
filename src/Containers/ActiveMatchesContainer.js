@@ -11,7 +11,8 @@ import GameMatchupContainer from "./GameMatchupContainer";
 class ActiveMatchesContainer extends React.Component {
 
     state = {
-        matches: []
+        matches: [],
+        closeSocket: null
     }
 
     static contextType = AuthContext;
@@ -25,8 +26,19 @@ class ActiveMatchesContainer extends React.Component {
             this.setState({
                 matches: res.data
             }, 
-            () => createActiveMatchesWebsocketConnection(this.capture_func))
+            () => {
+                const closeSocket = createActiveMatchesWebsocketConnection(this.capture_func);
+                this.setState({closeSocket});
+            })
         });
+    }
+
+    componentWillUnmount(){
+        console.log("UNMOUNT active matches");
+        if(this.state.closeSocket){
+            console.log("do we have the close function?");
+            this.state.closeSocket();
+        }
     }
 
     /*

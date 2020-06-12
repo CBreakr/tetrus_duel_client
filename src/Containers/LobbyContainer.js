@@ -1,7 +1,15 @@
 import React from "react";
 
 import createActivePlayersWebsocketConnection from "../ActivePlayersSocket";
-import { getAvailableUsers, issueChallenge, acceptChallenge, rejectChallenge, cancelChallenge } from "../requests";
+
+import { 
+        getAvailableUsers, 
+        issueChallenge, 
+        acceptChallenge, 
+        rejectChallenge, 
+        cancelChallenge
+    } from "../requests";
+
 import PlayerDisplay from "../Components/PlayerDisplay";
 import RankDisplay from "../Components/RankDisplay";
 
@@ -16,7 +24,8 @@ class LobbyContainer extends React.Component {
         challenges: [],
         challenge_issued_id: null,
         challenges_issued_by: [],
-        challenge_accepted: false
+        challenge_accepted: false,
+        closeSocket: null
     }
 
     static contextType = AuthContext;
@@ -29,9 +38,20 @@ class LobbyContainer extends React.Component {
         .then(res => {
             console.log("available users", res);
             this.setState({players: res.data}, 
-                () => createActivePlayersWebsocketConnection(this.capture_func)
+                () => {
+                    const closeSocket = createActivePlayersWebsocketConnection(this.capture_func);
+                    this.setState({closeSocket});
+                }
             )
         });
+    }
+
+    componentWillUnmount(){
+        console.log("UNMOUNT Lobby");
+        if(this.state.closeSocket){
+            console.log("do we have the close function?");
+            this.state.closeSocket();
+        }
     }
 
     /*

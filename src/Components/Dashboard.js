@@ -26,6 +26,7 @@ class Dashboard extends React.Component {
                 </div>
                 {
                     !this.props.spectator_view
+                    && this.props.completed_handshakes
                     ? <button onClick={this.props.concede}>Concede</button>
                     : ""
                 }
