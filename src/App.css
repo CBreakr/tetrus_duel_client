@@ -65,12 +65,15 @@ TETRIS ITSELF
 }
 
 @keyframes clear-line {
-  0% {background-color: black;}
-  30% {background-color: red;}
-  60% {opacity: 0;}
-  100% {background-color: black;}
+  0% {background-color: black; border: 1px solid #ddd;}
+  30% {background-color: red; border: 1px solid #ddd;}
+  60% {opacity: 0; border: 1px solid #ddd;}
+  100% {background-color: black; border: 1px solid #ddd;}
 } 
 
+.penalty {
+  animation: clear-line 1.5s infinite;
+}
 
 .game-over {
   color: red;

@@ -337,7 +337,13 @@ class GameBoard extends React.Component {
                     });
                 }
                 else{
-                    this.setState({penaltyRows: 0, grid: copy});
+                    console.log("PENALTY ROWS APPLIES, GAME NOT OVER");
+                    this.setState({penaltyRows: 0, grid: copy, move_number: this.state.move_number + 1}, () => {
+                        if(this.props.sendUpdate && typeof this.props.sendUpdate === "function"){
+                            console.log("PENALTY ROWS APPLIED", this.state);
+                            this.props.sendUpdate(this.state);
+                        }
+                    });
                 }
             }
 
@@ -1131,7 +1137,24 @@ class GameBoard extends React.Component {
                             </table>
                             {
                                 this.state.penaltyRows > 0
-                                ? <div>PENALTY ROWS: {this.state.penaltyRows}</div>
+                                ? (
+                                    <table className="game-board">
+                                    <tbody>
+                                        {
+                                            [...Array(this.state.penaltyRows)].map((rval, row_index) => {
+                                                console.log("penalty row");
+                                                return (<tr key={`r_${row_index}`}>
+                                                {
+                                                    [...Array(width)].map((cval, cell_index) => {
+                                                        return <td className={`game-cell penalty`} key={`c_${cell_index}`}></td>
+                                                    })
+                                                }
+                                            </tr>)
+                                            })
+                                        }
+                                    </tbody>
+                                    </table>
+                                )
                                 : ""
                             }
                         </div>

@@ -24,10 +24,16 @@ class ActiveMatchesContainer extends React.Component {
         console.log("ACTIVE MATCHES DID MOUNT");
 
         getActiveMatches(this.context.token)
-        .then(res => {
-            console.log("loaded active matches from the DB", res.data);
+        .then(res => { 
+            let data = [];
+            
+            if(res){
+                data = res.data
+            }
+
+            console.log("loaded active matches from the DB", data);
             this.setState({
-                matches: res.data
+                matches: data
             }, 
             () => {
                 const closeSocket = createActiveMatchesWebsocketConnection(this.capture_func);

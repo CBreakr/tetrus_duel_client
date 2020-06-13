@@ -24,6 +24,12 @@ class MainContainer extends React.Component {
         })
     }
 
+    // componentDidMount(){
+    //     if(!this.context.token){
+    //         this.props.history.push("/logout");
+    //     }
+    // }
+
     render() {
         return (
             <>

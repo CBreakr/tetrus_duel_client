@@ -99,6 +99,7 @@ class App extends React.Component {
       this.fetchUserDetails();
     }
     else{      
+      console.log("SET USER TO NULL");
       this.setState({user: null, token: null});
     }
   }
@@ -107,6 +108,7 @@ class App extends React.Component {
     console.log("LOGOUT");
     requests.logoutUser(this.state.token)
     .then(res => {
+      console.log("LOGOUT RESPONSE");
       this.setCurrentUser(null);
       localStorage.removeItem('__tetris_duel_token_user_id__');
       localStorage.removeItem('__tetris_duel_token_user_name__');
@@ -116,11 +118,15 @@ class App extends React.Component {
 
   fetchUserDetails = () => {
     console.log("FETCH USER DETAILS");
-    getUserDetails(this.state.token, this.state.user.id)
-    .then(res => {
-      console.log("USER DETAILS", res.data);
-      this.setState({user: res.data});
-    });
+    if(this.state.user){
+      getUserDetails(this.state.token, this.state.user.id)
+      .then(res => {
+        if(this.state.user){
+          console.log("USER DETAILS", res.data);
+          this.setState({user: res.data});
+        }
+      });
+    }
   }
 
   render(){
@@ -139,6 +145,9 @@ class App extends React.Component {
                 ? <UserActionContainer setCurrentUser={this.setCurrentUser} />
                 : <MainContainer />
               }
+            </Route>
+            <Route exact path="/logout">
+              <UserActionContainer setCurrentUser={this.setCurrentUser} />
             </Route>
             <Route render={() => <WithContainer {...this.state} fetchUserDetails={this.fetchUserDetails} /> } />
           </Switch>
