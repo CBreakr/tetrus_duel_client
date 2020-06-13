@@ -60,6 +60,18 @@ TETRIS ITSELF
   background-color:red;
 }
 
+.clearing {
+  animation: clear-line 0.5s infinite;
+}
+
+@keyframes clear-line {
+  0% {background-color: black;}
+  30% {background-color: red;}
+  60% {opacity: 0;}
+  100% {background-color: black;}
+} 
+
+
 .game-over {
   color: red;
 }

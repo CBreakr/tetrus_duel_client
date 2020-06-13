@@ -115,6 +115,7 @@ class App extends React.Component {
   }
 
   fetchUserDetails = () => {
+    console.log("FETCH USER DETAILS");
     getUserDetails(this.state.token, this.state.user.id)
     .then(res => {
       console.log("USER DETAILS", res.data);
@@ -139,7 +140,7 @@ class App extends React.Component {
                 : <MainContainer />
               }
             </Route>
-            <Route render={() => <WithContainer {...this.state} /> } />
+            <Route render={() => <WithContainer {...this.state} fetchUserDetails={this.fetchUserDetails} /> } />
           </Switch>
       </AuthContext.Provider>
     );
@@ -160,7 +161,7 @@ const WithContainer = (props) => {
                 <GameBoard solo={true} />
               </Route>
               <Route path="/matches/:id">
-                <MatchContainer />
+                <MatchContainer fetchUserDetails={props.fetchUserDetails} />
               </Route>
               <Route path="/">
                 <Redirect to="/" />

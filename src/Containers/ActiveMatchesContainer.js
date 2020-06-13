@@ -21,8 +21,11 @@ class ActiveMatchesContainer extends React.Component {
         // get the currently active matches
         // set up the subscription to the ActiveMatchChannel
 
+        console.log("ACTIVE MATCHES DID MOUNT");
+
         getActiveMatches(this.context.token)
         .then(res => {
+            console.log("loaded active matches from the DB", res.data);
             this.setState({
                 matches: res.data
             }, 

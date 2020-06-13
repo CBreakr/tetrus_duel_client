@@ -28,6 +28,8 @@ class MatchContainer extends React.Component {
         user2: null,
         user1_gamestate: null,
         user2_gamestate: null,
+        penaltyRows_for_game1: 0,
+        penaltyRows_for_game2: 0,
         winner_id: null,
         my_handshake: false,
         completed_handshakes: false,
@@ -95,9 +97,10 @@ class MatchContainer extends React.Component {
                 // hmm, what do I do here?
                 console.log("THE MATCH IS OVER!!!!", message.winner_id)
                 this.setState({winner_id: message.winner_id});
+                this.props.fetchUserDetails();
                 break;
             case "match_update":
-                console.log("MATCH UPDATE", message.gamestate)
+                console.log("MATCH UPDATE", message.gamestate, message.penaltyRows);
                 const currentGameId = this.getCurrentGameId();
 
                 console.log("current game id", currentGameId);
@@ -116,11 +119,17 @@ class MatchContainer extends React.Component {
 
                 if(message.gamestate.game_id === this.state.game1_id){
                     console.log("update game 1", message.gamestate);
-                    this.setState({user1_gamestate: message.gamestate});
+                    this.setState({
+                        user1_gamestate: message.gamestate, 
+                        penaltyRows_for_game2:message.penaltyRows
+                    });
                 }
                 else if(message.gamestate.game_id === this.state.game2_id){
                     console.log("update game 2", message.gamestate);
-                    this.setState({user2_gamestate: message.gamestate});
+                    this.setState({
+                        user2_gamestate: message.gamestate, 
+                        penaltyRows_for_game1:message.penaltyRows
+                    });
                 }
 
                 break;
@@ -146,9 +155,9 @@ class MatchContainer extends React.Component {
         });
     }
 
-    sendUpdate = (gamestate) => {
-        console.log("SEND UPDATE", gamestate);
-        updateMatch(this.context.token, this.state.match_id, gamestate)
+    sendUpdate = (gamestate, penaltyRows) => {
+        console.log("SEND UPDATE", gamestate, penaltyRows);
+        updateMatch(this.context.token, this.state.match_id, gamestate, penaltyRows)
         .then(res => {
             // is there anything to do here?
             // I think this is just up the the sockets now
@@ -187,7 +196,7 @@ class MatchContainer extends React.Component {
                     <Dashboard 
                         user1={this.state.user1} 
                         user2={this.state.user2} 
-                        winner={this.state.winner} 
+                        winner_id={this.state.winner_id} 
                         concede={this.concede}
                         completed_handshakes={this.state.completed_handshakes}
                     />

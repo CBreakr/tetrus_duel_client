@@ -27,22 +27,24 @@ class GameContainer extends React.Component {
         let opponent_game_id = null;
         let opponent_gamestate = null;
 
+        let penaltyRows = 0;
+
         if(this.props.user1.id === this.context.user.id){
-            console.log("USER ONE", "U2GS", this.props.user2_gamestate);
             current_game_id = this.props.game1_id;
             opponent_game_id = this.props.game2_id;
             opponent_gamestate = this.props.user2_gamestate;
+            penaltyRows = this.props.penaltyRows_for_game1;
         }
         else if(this.props.user2.id === this.context.user.id){
-            console.log("USER 2", "U1GS", this.props.user1_gamestate);
             current_game_id = this.props.game2_id;
             opponent_game_id = this.props.game1_id;
             opponent_gamestate = this.props.user1_gamestate;
+            penaltyRows = this.props.penaltyRows_for_game2;
         }
 
-        console.log("id's", this.context.user.id, this.props.user1.id, this.props.user2.id);
         console.log("OPPONENT GAMESTATE", opponent_gamestate);
         console.log("game_ids", current_game_id, opponent_game_id);
+        console.log("PENALTY ROWS:", penaltyRows);
 
         return (
             <>
@@ -58,6 +60,8 @@ class GameContainer extends React.Component {
                             winner_id={this.props.winner_id} 
                             game_id={current_game_id} 
                             sendUpdate={this.props.sendUpdate} 
+                            penaltyRows={penaltyRows}
+                            rand={Math.random()}
                         />
                     </div>
                 : <span>SPECTATOR VIEW</span>

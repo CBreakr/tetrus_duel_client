@@ -26,6 +26,12 @@ let timeout = 700;
 let timer = null;
 const rate = 0.99;
 
+const completed_delay = 500;
+
+let penaltyRows = 0;
+
+let penaltyUpdated = false;
+
 class GameBoard extends React.Component {
 
     state = {
@@ -59,7 +65,9 @@ class GameBoard extends React.Component {
         // timer: null,
         nextPiece: null,
         move_number: 0,
-        buttonText: "Start"
+        buttonText: "Start",
+        cleared:null,
+        penaltyRows: 0
     }
 
     static contextType = AuthContext;
@@ -255,17 +263,106 @@ class GameBoard extends React.Component {
     //
     //
     nextStep = () => {
-        if(this.state.active){
+        if(this.state.active || this.state.cleared){
             // for now, for the sake of testing
-            this.moveDown();
+            if(this.state.cleared){
+
+                const clearedCount = this.state.cleared.length;
+
+                const copy = [...this.state.grid];
+                console.log("CLEARED", this.state.cleared);
+                let cleared_index = 0;
+                let downShift = 0;
+    
+                for(let r_index = height-1; r_index >= 0 ; r_index--){
+                    if(r_index === this.state.cleared[cleared_index]){
+                        cleared_index++;
+                        downShift++;
+                        for(let c_index = 0; c_index < width; c_index++){
+                            copy[r_index][c_index] = 0;
+                        }
+                    }
+                    else if(downShift){
+                        for(let c_index = 0; c_index < width; c_index++){
+                            copy[r_index + downShift][c_index] = copy[r_index][c_index];
+                            copy[r_index][c_index] = 0;
+                        }
+                    }
+                }
+
+                this.setState({grid: copy, active: null, cleared: null, move_number: this.state.move_number+1}, () => {
+                    if(this.props.sendUpdate && typeof this.props.sendUpdate === "function"){
+                        console.log("SEND UPDATE", this.state);
+                        this.props.sendUpdate(this.state);
+                    }
+                });
+            }
+            else{                
+                // commented out for now to test the penalty rows
+                // this.moveDown();
+            }
         }
         else{
+            if(this.state.penaltyRows > 0){
+                console.log("we have penalty rows", this.state.penaltyRows);
+
+                // check for whether the game is over, update the grid
+                let gameOver = false;
+
+                const copy = [...this.state.grid];
+
+                outer:
+                for(let i = 0; i < this.state.penaltyRows; i++){
+                    copy.shift();
+                    copy.push(this.createPenaltyRow());
+
+                    for(let j = 0; j < width; j++){
+                        if(this.state.grid[i][j]){
+                            gameOver = true;
+                            break outer;
+                        }
+                    }
+                }
+
+                if(gameOver){
+                    // clearInterval(this.state.timer);
+                    clearTimeout(timer);
+                    timer = null;
+                    // this.setState({gameOver: true, timer: null}, () => {
+                    this.setState({gameOver: true}, () => {
+                        if(this.props.sendUpdate && typeof this.props.sendUpdate === "function"){
+                            console.log("MATCH LOST", this.state);
+                            this.props.sendUpdate(this.state);
+                        }
+                    });
+                }
+                else{
+                    this.setState({penaltyRows: 0, grid: copy});
+                }
+            }
+
             timeout *= rate;
             console.log("TIMEOUT", timeout);
             this.generateNewPiece();
         }
 
         timer = setTimeout(this.nextStep, timeout);
+    }
+
+    createPenaltyRow = () => {
+        const hole = Math.floor(Math.random() * width);
+        const row = [];
+
+        for(let i = 0; i < width; i++){
+            if(i === hole){
+                row.push(0);
+            }
+            else{
+                row.push(1);
+            }
+        }
+
+        return row;
     }
 
     //
@@ -282,15 +379,24 @@ class GameBoard extends React.Component {
             });
         });
 
-        this.clearCompletedLines(copy);
-
-        this.setState({grid: copy, active: null, move_number: this.state.move_number+1}, () => {
-            if(this.props.sendUpdate && typeof this.props.sendUpdate === "function"){
-                console.log("SEND UPDATE", this.state);
-                this.props.sendUpdate(this.state);
-            }
-        });
+        this.clearCompletedLines(copy);        
     }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
     //
     //
@@ -304,30 +410,55 @@ class GameBoard extends React.Component {
         }
 
         if(cleared.length){
-            const copy = [...this.state.grid];
-            console.log("CLEARED", cleared);
-            let cleared_index = 0;
-            let downShift = 0;
 
-            for(let r_index = height-1; r_index >= 0 ; r_index--){
-                if(r_index === cleared[cleared_index]){
-                    cleared_index++;
-                    downShift++;
-                    for(let c_index = 0; c_index < width; c_index++){
-                        copy[r_index][c_index] = 0;
-                    }
-                }
-                else if(downShift){
-                    for(let c_index = 0; c_index < width; c_index++){
-                        copy[r_index + downShift][c_index] = copy[r_index][c_index];
-                        copy[r_index][c_index] = 0;
-                    }
-                }
-            }
+            // // clear the timer
+            // clearTimeout(timer);
+            // timer = null;
 
-            this.setState({grid: copy});
+            const clearingCopy = [...this.state.grid];
+
+            // replace the cleared lines
+            cleared.forEach(r_index => {
+                clearingCopy[r_index].forEach((cell, c_index) => {
+                    clearingCopy[r_index][c_index] = 3;
+                });
+            });
+            
+            console.log("CLEARED CLEARED CLEARED", cleared);
+
+            // set state
+            this.setState({grid: clearingCopy, cleared, active: null, move_number: this.state.move_number+1}, () => {
+                if(this.props.sendUpdate && typeof this.props.sendUpdate === "function"){
+                    console.log("SEND UPDATE", this.state);
+                    this.props.sendUpdate(this.state);
+                }
+            });
+        }
+        else{
+            this.setState({grid, active: null, move_number: this.state.move_number+1}, () => {
+                if(this.props.sendUpdate && typeof this.props.sendUpdate === "function"){
+                    console.log("SEND UPDATE", this.state);
+                    this.props.sendUpdate(this.state);
+                }
+            });
         }
     }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
     //
     //
@@ -846,8 +977,11 @@ class GameBoard extends React.Component {
     //
     componentDidUpdate(prevProps, prevState){
         // console.log(this.props.gamestate, prevProps.gamestate);
+
+        console.log("update?", this.props);
+
         if(this.props.gamestate && this.props.gamestate.game_id === this.state.game_id){
-            console.log("we have a gamestate", !prevProps.gamestate);
+            console.log("we have a gamestate", !prevProps.gamestate, this.props);
             if(!prevProps.gamestate
                 || 
                 this.props.gamestate.move_number != prevProps.gamestate.move_number
@@ -857,9 +991,20 @@ class GameBoard extends React.Component {
                 this.setState({
                     move_number: this.props.gamestate.move_number,
                     grid: this.props.gamestate.grid,
-                    gameOver: this.props.gamestate.gameOver
+                    gameOver: this.props.gamestate.gameOver,
                 });
             }
+        }
+        else if(!penaltyUpdated && this.props.penaltyRows > 0){
+            console.log("penalty rows", this.props.penaltyRows);
+            console.log("new penalty rows", this.props.penaltyRows + this.state.penaltyRows);
+            this.setState({
+                penaltyRows: this.props.penaltyRows + this.state.penaltyRows
+            });
+            penaltyUpdated = true;
+        }
+        else{
+            penaltyUpdated = false;
         }
     }
     
@@ -929,6 +1074,9 @@ class GameBoard extends React.Component {
                                                 else if(cell_value === 2){
                                                     classesForCell = "active";
                                                 }
+                                                else if(cell_value === 3){
+                                                    classesForCell = "clearing";
+                                                }
                                                 return <td className={`game-cell ${classesForCell}`} key={`c_${cell_index}`}></td>
                                             })
                                         }
@@ -964,7 +1112,7 @@ class GameBoard extends React.Component {
                                                         if(cell_index < 2 || cell_index > (width-3)){
                                                             return;
                                                         }
-                                                        
+
                                                         const cell_value = row[cell_index];
                                                         let classesForCell = "";
                                                         if(cell_value === 0){
@@ -981,6 +1129,11 @@ class GameBoard extends React.Component {
                                     }
                                 </tbody>
                             </table>
+                            {
+                                this.state.penaltyRows > 0
+                                ? <div>PENALTY ROWS: {this.state.penaltyRows}</div>
+                                : ""
+                            }
                         </div>
                         : ""
                     }
