@@ -6,7 +6,7 @@ const baseURL = "https://flatirontetris-server.herokuapp.com/"
 
 // export const webSocketUrl = 'ws://localhost:3000/cable';
 
-export const webSocketUrl = 'wss://XXflatirontetris-server.herokuapp.com/cable';
+export const webSocketUrl = 'wss://flatirontetris-server.herokuapp.com/cable';
 
 const handleError = err => console.error(err);
 
