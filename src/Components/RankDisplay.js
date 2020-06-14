@@ -11,7 +11,7 @@ const RankDisplay = (props) => {
             ? <span className="user-display">
                 {props.name}
                 {
-                    Number.isInteger(props.rank)
+                    isNumber(props.rank)
                     ? `(${props.rank})`
                     : ""
                 }
@@ -23,3 +23,7 @@ const RankDisplay = (props) => {
 }
 
 export default RankDisplay;
+
+function isNumber(value) {
+    return typeof value === 'number' && isFinite(value);
+}
