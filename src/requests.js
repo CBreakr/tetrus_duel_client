@@ -1,9 +1,12 @@
 import axios from "axios";
 
 // for now...
-const baseURL = "http://localhost:3000";
+// const baseURL = "http://localhost:3000";
+const baseURL = "https://flatirontetris-server.herokuapp.com/"
 
-export const webSocketUrl = 'ws://localhost:3000/cable';
+// export const webSocketUrl = 'ws://localhost:3000/cable';
+
+export const webSocketUrl = 'wss://flatirontetris-server.herokuapp.com/cable';
 
 const handleError = err => console.error(err);
 
