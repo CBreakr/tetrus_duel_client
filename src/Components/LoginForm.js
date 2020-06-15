@@ -45,34 +45,41 @@ class LoginForm extends React.Component {
 
     render() {
         return (            
-            <div id='box1'>
-                <h3 className='title is-3'>Login</h3>
-                {
-                    this.state.error
-                        ? <div className="error">{this.state.error}</div>
-                        : ""
-                }
-                <form onSubmit={this.login}>
-                    <div className='field'>
-                        <label className='label' htmlFor="login_name">Username</label>
-                        <input className='input is-success' type="text" id="login_name"
-                            name="name"
-                            value={this.state.name}
-                            onChange={this.onChange} />
-                    </div>
+            <div id='box1'>                
+                <form onSubmit={this.login}>                    
+                    <div className="form-grid">
+                        <span className="form-cell">
+                            <h2 className='title is-3'>Login</h2>
+                        </span>
+                        <span></span>
 
-                    <div className='field'>
-                        <label className='label' htmlFor="login_password">Password</label>
+                        <span className="form-cell">
+                            <label className='label' htmlFor="login_name">USERNAME</label>
+                            <label className='label' htmlFor="login_password">PASSWORD</label>
+                        </span>
 
-                        <input className='input is-success' type="password" id="login_password"
-                            name="password"
-                            value={this.state.password}
-                            onChange={this.onChange} />
-                    </div>
+                        <span className="form-cell">
+                            <input className='input is-success' type="text" id="login_name"
+                                name="name"
+                                value={this.state.name}
+                                onChange={this.onChange} />
 
-                    <div className="control" >
-                        <input className='button is-link' type="submit" value="Login" />
+                            <input className='input is-success' type="password" id="login_password"
+                                name="password"
+                                value={this.state.password}
+                                onChange={this.onChange} />
+                        </span>
+
+                        <span></span>
+                        <span className="form-cell">
+                            <button type="submit">Login</button>
+                        </span>
                     </div>
+                    {
+                        this.state.error
+                            ? <div className="error">{this.state.error}</div>
+                            : ""
+                    }
                 </form>
             </div>
         )

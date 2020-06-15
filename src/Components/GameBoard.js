@@ -22,7 +22,7 @@ const width = 10;
 
 let nextRows = 0;
 
-let timeout = 700;
+let timeout = 500;
 let timer = null;
 const rate = 0.99;
 
@@ -299,7 +299,7 @@ class GameBoard extends React.Component {
             }
             else{                
                 // commented out for now to test the penalty rows
-                // this.moveDown();
+                this.moveDown();
             }
         }
         else{
@@ -953,6 +953,8 @@ class GameBoard extends React.Component {
     //
     //
     componentDidMount(){
+
+        timeout = 500;
         // this is some brilliant hackery
         // https://stackoverflow.com/questions/39135912/react-onkeydown-onkeyup-events-on-non-input-elements
         document.body.addEventListener('keydown', this.handleKeyDown);
@@ -1056,11 +1058,8 @@ class GameBoard extends React.Component {
     //
     render(){
         return (
-            <div>
-                {
-                    this.state.gameOver && <h2 className="game-over">Game Over!</h2>
-                }
-                <div className="split">
+            <div>                
+                <div className="split">                    
                     <div className="main-game">
                         <table className="game-board">
                             <tbody>
@@ -1095,11 +1094,15 @@ class GameBoard extends React.Component {
                         {
                             this.props.solo
                             ? <> 
-                            <button onClick={this.toggleGame}>
-                                {
-                                    `${this.state.buttonText} Game`
-                                }
-                            </button>
+                            {
+                                !this.state.gameOver
+                                ? <button onClick={this.toggleGame}>
+                                    {
+                                        `${this.state.buttonText} Game`
+                                    }
+                                </button>
+                                : ""
+                            }                            
                             <button onClick={this.returnToLobby}>Return To Lobby</button>
                             </>
                             : ""
@@ -1155,6 +1158,24 @@ class GameBoard extends React.Component {
                                     </tbody>
                                     </table>
                                 )
+                                : ""
+                            }
+                            {
+                                this.state.gameOver && <h2 className="game-over">Game Over!</h2>
+                            }
+                            {
+                                this.props.solo
+                                ? <div className="controls">
+                                    <p>
+                                        USE THE ARROW KEYS
+                                    </p>
+                                    <p>
+                                    <i class="fas fa-arrow-up"></i> rotate current piece
+                                    </p>
+                                    <p>
+                                    <i class="fas fa-arrow-left"></i>/<i class="fas fa-arrow-down"></i>/<i class="fas fa-arrow-right"></i> move current piece
+                                    </p>
+                                </div>
                                 : ""
                             }
                         </div>

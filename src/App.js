@@ -1,6 +1,8 @@
 import React from 'react';
 import './App.css';
 
+import flatris from './flatris_icon.svg';
+
 import { withRouter } from "react-router-dom";
 
 import {
@@ -132,11 +134,35 @@ class App extends React.Component {
   render(){
     return (
       <AuthContext.Provider value={this.state}>
-        {
-          this.state.user
-          ? <span><RankDisplay {...this.state.user} /> <button onClick={this.logout}>Logout</button></span>
-          : ""
-        }
+        <div className="nav-bar">
+          <div className="main-title">
+          FLATIЯON
+          <div className="icon">
+            <svg version="1.1" id="flatris" 
+              xmlns="http://www.w3.org/2000/svg" 
+              x="0px" y="0px"
+              viewBox="0 0 30 30">
+              <rect x="1" y="10" width="5" height="5"/>
+              <rect x="7" y="10" width="5" height="5"/>
+              <rect x="13" y="10" width="5" height="5"/>
+              <rect x="19" y="10" width="5" height="5"/>
+              <rect x="3" y="19" width="5" height="5"/>
+              <rect x="9" y="19" width="5" height="5"/>
+              <rect x="15" y="19" width="5" height="5"/>
+              <rect x="21" y="19" width="5" height="5"/>
+            </svg>
+          </div>
+          &nbsp;TETЯIS
+          </div>
+          {
+            this.state.user
+            ? <>
+                <RankDisplay {...this.state.user} /> 
+                <button onClick={this.logout}>Logout</button>
+              </>
+            : ""
+          }
+        </div>
         <br />
         <Switch>
             <Route exact path="/">

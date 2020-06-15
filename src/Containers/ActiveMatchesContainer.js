@@ -26,7 +26,7 @@ class ActiveMatchesContainer extends React.Component {
         getActiveMatches(this.context.token)
         .then(res => { 
             let data = [];
-            
+
             if(res){
                 data = res.data
             }
@@ -87,19 +87,25 @@ class ActiveMatchesContainer extends React.Component {
 
     render() {
         return (
-            <div className="active-matches-container">
-                <h3>Active Matches</h3>
-                {
-                    this.state.matches && this.state.matches.map(match => {
-                        return (
-                            <GameMatchupContainer 
-                                key={match.id}
-                                {...match}
-                            />
-                        )
-                    })
-                }
-            </div>
+            <>
+            {
+                this.state.matches && this.state.matches.length > 0
+                ? <div className="active-matches-container">                
+                    <h3>Active Matches</h3>
+                    {
+                        this.state.matches.map(match => {
+                            return (
+                                <GameMatchupContainer 
+                                    key={match.id}
+                                    {...match}
+                                />
+                            )
+                        })
+                    }
+                </div>
+                : ""
+            }
+            </>
         );
     }
 }

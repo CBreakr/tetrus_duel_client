@@ -53,42 +53,50 @@ class SignupForm extends React.Component {
 
     render() {
         return (
-            <div id='box2'>
-                <h3 className='title is-3'>Register</h3>
-                {
-                    this.state.error
-                        ? <div className="error">{this.state.error}</div>
-                        : ""
-                }
+            <div id='box2'>                
                 <form onSubmit={this.register}>
-                    <div className='field'>
-                        <label className='label' htmlFor="register_name">Username</label>
-                        <input className='input is-success' type="text" id="register_name"
-                            name="name"
-                            value={this.state.name}
-                            onChange={this.onChange}
-                        />
-                    </div>
+                    <div className="form-grid">
+                        <span></span>
+                        <span className="form-cell">
+                            <h2 className='title is-3'>Register</h2>
+                        </span>
 
-                    <div className='field'>
-                        <label className='label' htmlFor="register_password">Password</label>
-                        <input className='input is-success' type="password" id="register_password"
-                            name="password"
-                            value={this.state.password}
-                            onChange={this.onChange}
-                        />
+                        <span className="form-cell">
+                            <label className='label' htmlFor="register_name">USERNAME</label>
+                            <label className='label' htmlFor="register_password">PASSWORD</label>
+                            <label className='label' htmlFor="confirmation">CONFIRM</label>
+                        </span>
+
+                        <span className="form-cell">
+                            <input className='input is-success' type="text" id="register_name"
+                                name="name"
+                                value={this.state.name}
+                                onChange={this.onChange}
+                            />
+                            
+                            <input className='input is-success' type="password" id="register_password"
+                                name="password"
+                                value={this.state.password}
+                                onChange={this.onChange}
+                            />
+                            
+                            <input className='input is-success' type="password" id="confirmation"
+                                name="confirmation"
+                                value={this.state.confirmation}
+                                onChange={this.onChange}
+                            />
+                        </span>
+
+                        <span className="form-cell">
+                            <button type="submit">Register</button>
+                        </span>
+                        <span></span>
                     </div>
-                    <div className='field'>
-                        <label className='label' htmlFor="confirmation">Confirm Password</label>
-                        <input className='input is-success' type="password" id="confirmation"
-                            name="confirmation"
-                            value={this.state.confirmation}
-                            onChange={this.onChange}
-                        />
-                    </div>
-                    <div className='control'>
-                        <input className='button is-link' type="submit" value="Register" />
-                    </div>
+                    {
+                        this.state.error
+                            ? <div className="error">{this.state.error}</div>
+                            : ""
+                    }
                 </form>
             </div>
         )

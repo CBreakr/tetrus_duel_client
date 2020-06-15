@@ -32,11 +32,11 @@ class MainContainer extends React.Component {
 
     render() {
         return (
-            <>
-            <ActiveMatchesContainer />
-            <LobbyContainer />
-            <button onClick={this.playSolo}>Play Solo</button>
-            </>
+            <div className="main-container">
+                <ActiveMatchesContainer />
+                <LobbyContainer />
+                <button onClick={this.playSolo}>Play Solo</button>
+            </div>
         )
     }
 }
