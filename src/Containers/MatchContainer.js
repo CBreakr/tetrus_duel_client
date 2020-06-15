@@ -208,7 +208,7 @@ class MatchContainer extends React.Component {
                             !this.state.winner_id
                             ? <> {
                                 !this.state.completed_handshakes
-                                ? <span>Waiting for opponent...</span>
+                                ? <span className="flashing space">Waiting for opponent...</span>
                                 : <GameContainer 
                                     {...this.state} 
                                     sendUpdate={this.sendUpdate} 
