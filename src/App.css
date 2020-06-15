@@ -186,8 +186,16 @@ TETRIS ITSELF
 
 .active-matches-container {
   border: 1px solid black;
-  padding: 2px;
-  margin: 2px;
+  padding: 4px;
+  margin: 4px;
+}
+
+.active-matches-list {
+
+}
+
+.matchup:nth-child(odd) {
+  /* background-color: lightpink; */
 }
 
 .win {
@@ -208,4 +216,43 @@ TETRIS ITSELF
 
 .spectator-container {
   display: flex;
+}
+
+.flashing {
+  animation: flashing-message 2s infinite;
+}
+
+@keyframes flashing-message {
+  0% {opacity: 1}
+  50% {opacity: 0}
+  100% {opacity: 1}
+}
+
+.active-players-container {
+  border: 1px solid black;
+  padding: 4px;
+  margin: 4px;
+}
+
+.active-players-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 4px;
+}
+
+.challenges-container {
+  border: 1px solid black;
+  padding: 4px;
+  margin: 4px;
+}
+
+.challenge:nth-child(odd) {
+  /* background-color: lightpink; */
+}
+
+.player-display {
+  display: inline-block;
+  border: 1px solid #ddd;
+  margin: 4px;
+  padding: 2px;
 }

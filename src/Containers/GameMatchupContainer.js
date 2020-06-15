@@ -12,7 +12,7 @@ class GameMatchupContainer extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="matchup">
                 {
                     this.props.user1 && this.props.user2
                     ? (<span>
