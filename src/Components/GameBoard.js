@@ -1186,6 +1186,13 @@ class GameBoard extends React.Component {
                                     <p>
                                     <i class="fas fa-arrow-left"></i>/<i class="fas fa-arrow-down"></i>/<i class="fas fa-arrow-right"></i> move current piece
                                     </p>
+                                    <p>
+                                        <ul>
+                                            <li>
+                                                Speed increases by 1% with every piece
+                                            </li>
+                                        </ul>
+                                    </p>
                                 </div>
                                 : ""
                             }
