@@ -39,12 +39,14 @@ class SpectatorContainer extends React.Component {
                 <div className="spectator-container">
                     <RemoteGameContainer 
                         winner_id={this.props.winner_id} 
+                        user={this.props.user1}
                         gamestate={this.props.user1_gamestate} 
                         game_id={this.props.game1_id} 
                     />
 
                     <RemoteGameContainer 
                         winner_id={this.props.winner_id} 
+                        user={this.props.user2}
                         gamestate={this.props.user2_gamestate} 
                         game_id={this.props.game2_id} 
                     />

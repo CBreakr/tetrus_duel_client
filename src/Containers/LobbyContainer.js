@@ -126,7 +126,9 @@ class LobbyContainer extends React.Component {
         // {challenger: current_user, challenged: params[:id]}
         console.log(this.context.user.id, details.challenged);
         if(this.context.user.id === details.challenged){
-            this.setState({challenges: [...this.state.challenges, details.challenger]});
+            this.setState({challenges: [...this.state.challenges, details.challenger]}, ()=> {
+                notifyUser(`Challenge from ${details.challenger.name}`);
+            });
         }
 
         // also mark that a challenge has been issued
@@ -183,6 +185,7 @@ class LobbyContainer extends React.Component {
         // then redirect them to the correct match page
         console.log("process acceptance", players, match_id)
         if(players.includes(this.context.user.id)){
+            notifyUser("Challenge Accepted!");
             this.props.history.push(`/matches/${match_id}`);
         }
     }
@@ -280,3 +283,29 @@ class LobbyContainer extends React.Component {
 }
 
 export default withRouter(LobbyContainer);
+
+//
+//
+//
+function notifyUser(notice) {
+    // Let's check if the browser supports notifications
+    if (!("Notification" in window)) {
+        // alert("This browser does not support desktop notification");
+    }
+
+    // Let's check whether notification permissions have already been granted
+    else if (Notification.permission === "granted") {
+        // If it's okay let's create a notification
+        var notification = new Notification(`Flatiron Tetris! ${notice}`);
+    }
+
+    // Otherwise, we need to ask the user for permission
+    else if (Notification.permission !== "denied") {
+        Notification.requestPermission().then(function (permission) {
+            // If the user accepts, let's create a notification
+            if (permission === "granted") {
+                var notification = new Notification(`Flatiron Tetris! ${notice}`);
+            }
+        });
+    }
+}

@@ -956,6 +956,9 @@ class GameBoard extends React.Component {
     componentDidMount(){
 
         timeout = 500;
+        penaltyRows = 0;
+        penaltyUpdated = false;
+
         // this is some brilliant hackery
         // https://stackoverflow.com/questions/39135912/react-onkeydown-onkeyup-events-on-non-input-elements
         document.body.addEventListener('keydown', this.handleKeyDown);
@@ -1009,7 +1012,7 @@ class GameBoard extends React.Component {
             console.log("penalty rows", this.props.penaltyRows);
             console.log("new penalty rows", this.props.penaltyRows + this.state.penaltyRows);
             this.setState({
-                penaltyRows: this.props.penaltyRows + this.state.penaltyRows
+                penaltyRows: Math.max(this.props.penaltyRows, this.state.penaltyRows)
             });
             penaltyUpdated = true;
         }
@@ -1156,7 +1159,7 @@ class GameBoard extends React.Component {
                                                 console.log("penalty row");
                                                 return (<tr key={`r_${row_index}`}>
                                                 {
-                                                    [...Array(width)].map((cval, cell_index) => {
+                                                    [...Array(width-4)].map((cval, cell_index) => {
                                                         return <td className={`game-cell penalty`} key={`c_${cell_index}`}></td>
                                                     })
                                                 }
