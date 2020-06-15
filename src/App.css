@@ -1,5 +1,34 @@
+
+:root {
+  --red: #d00000;
+}
+
 .App {
   text-align: center;
+}
+
+.icon {
+  display:inline-block;
+  height: 20px;
+  width: 20px;
+  margin: 0 8px;
+}
+
+.icon svg {
+  transform: scale(1.5) rotate(-75deg);
+  position: relative;
+  top: 0px;
+}
+
+.error {
+  color: var(--red);
+}
+
+.controls {
+  display: inline-block;
+  margin: 12px 0;
+  padding: 4px;
+  border: 1px solid #ddd;
 }
 
 /*
@@ -8,6 +37,68 @@ STRUCTURE
 
 body {
   overflow: hidden;
+}
+
+.user-action-container {
+  padding: 4px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap:4px;
+}
+
+.form-cell {
+  border: 2px solid #ddd;
+  padding: 8px;
+  height: 120px;
+  width: 120px;
+  display:flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: space-around;
+}
+
+.form-cell input {
+  border: 1px solid black;
+  padding: 4px;
+}
+
+.form-grid button {
+  margin-top: 12px;
+}
+
+.main-title {
+  font-size: 24px;
+}
+
+.nav-bar {
+  background-color: #ddd;
+  padding: 8px 4px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.main-container {
+  padding: 4px;
+}
+
+button {
+  margin: 2px;
+  padding: 4px 4px;
+  background-color: #eaa;
+  border: 1px solid black;
+  border-radius: 4px;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+button:hover {
+  background-color: var(--red);
+  color: white;
 }
 
 .match-container {
@@ -57,7 +148,7 @@ TETRIS ITSELF
 }
 
 .active {
-  background-color:red;
+  background-color:var(--red);
 }
 
 .clearing {
@@ -66,7 +157,7 @@ TETRIS ITSELF
 
 @keyframes clear-line {
   0% {background-color: black; border: 1px solid #ddd;}
-  30% {background-color: red; border: 1px solid #ddd;}
+  30% {background-color: var(--red); border: 1px solid #ddd;}
   60% {opacity: 0; border: 1px solid #ddd;}
   100% {background-color: black; border: 1px solid #ddd;}
 } 
@@ -76,7 +167,7 @@ TETRIS ITSELF
 }
 
 .game-over {
-  color: red;
+  color: var(--red);
 }
 
 .split{
@@ -109,8 +200,8 @@ TETRIS ITSELF
 
 .lose {
   background-color: lightpink;
-  color: red;
-  border: 1px solid red;
+  color: var(--red);
+  border: 1px solid var(--red);
   margin: 2px;
   padding: 4px;
 }
