@@ -67,7 +67,8 @@ class GameBoard extends React.Component {
         move_number: 0,
         buttonText: "Start",
         cleared:null,
-        penaltyRows: 0
+        penaltyRows: 0,
+        updated: false
     }
 
     static contextType = AuthContext;
@@ -997,6 +998,7 @@ class GameBoard extends React.Component {
                 console.log("set the gamestate for the board");
 
                 this.setState({
+                    updated: true,
                     move_number: this.props.gamestate.move_number,
                     grid: this.props.gamestate.grid,
                     gameOver: this.props.gamestate.gameOver,
@@ -1061,6 +1063,12 @@ class GameBoard extends React.Component {
             <div>                
                 <div className="split">                    
                     <div className="main-game">
+                        {
+                            this.props.is_remote
+                            && !this.state.updated
+                            ? <div className="flashing">Waiting for stream display...</div>
+                            : ""
+                        }
                         <table className="game-board">
                             <tbody>
                             {

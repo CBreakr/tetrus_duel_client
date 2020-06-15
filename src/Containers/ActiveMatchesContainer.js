@@ -90,18 +90,20 @@ class ActiveMatchesContainer extends React.Component {
             <>
             {
                 this.state.matches && this.state.matches.length > 0
-                ? <div className="active-matches-container">                
+                ? <div className="active-matches-container">
                     <h3>Active Matches</h3>
-                    {
-                        this.state.matches.map(match => {
-                            return (
-                                <GameMatchupContainer 
-                                    key={match.id}
-                                    {...match}
-                                />
-                            )
-                        })
-                    }
+                    <div className="active-matches-list">
+                        {
+                            this.state.matches.map(match => {
+                                return (
+                                    <GameMatchupContainer 
+                                        key={match.id}
+                                        {...match}
+                                    />
+                                )
+                            })
+                        }
+                    </div>
                 </div>
                 : ""
             }

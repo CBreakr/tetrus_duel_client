@@ -230,29 +230,39 @@ class LobbyContainer extends React.Component {
         console.log("challenges render", this.state.challenges_issued_by);
 
         return (
-            <div>
-                {this.state.players && this.state.players.map(player => {
-                    if(player.id !== this.context.user.id){
-                        return (
-                            <PlayerDisplay key={player.id} 
-                                {...player} /* this has the player's issued_challenege value */
-                                createChallenge={this.triggerIssueChallenge}                                 
-                                cancelChallenge={this.triggerCancelChallenge}
-                                challenge_issued_id={this.state.challenge_issued_id} 
-                                challenges_issued_by={this.state.challenges_issued_by}
-                            />
-                        )
-                    }
-                    return null;
-                })}
+            <>
+            <div className="active-players-container">
+                <h3>Available Players</h3>
                 {
-                    this.state.challenges.length > 0
-                    ? <>
-                        <h3>Challenges</h3>
+                    this.state.players && this.state.players.length > 1
+                    ? <div className="active-players-list">
+                        {this.state.players.map(player => {
+                            if(player.id !== this.context.user.id){
+                                return (
+                                    <PlayerDisplay key={player.id} 
+                                        {...player} /* this has the player's issued_challenege value */
+                                        createChallenge={this.triggerIssueChallenge}                                 
+                                        cancelChallenge={this.triggerCancelChallenge}
+                                        challenge_issued_id={this.state.challenge_issued_id} 
+                                        challenges_issued_by={this.state.challenges_issued_by}
+                                    />
+                                )
+                            }
+                            return null;
+                        })}
+                    </div>
+                    : ""
+                }                
+            </div>
+            {
+                this.state.challenges.length > 0
+                ? <div className="challenges-container">
+                    <h3>Challenges</h3>
+                    <div className="challenges-list">
                         {
                             this.state.challenges.map(challenger => {
                                 return (
-                                    <div key={challenger.id}>
+                                    <div key={challenger.id} className="challenge">
                                         <RankDisplay {...challenger} />
                                         <button onClick={() => this.triggerAcceptChallenge(challenger.id)}>Accept</button>
                                         <button onClick={() => this.triggerRejectChallenge(challenger.id)}>Reject</button>
@@ -260,10 +270,11 @@ class LobbyContainer extends React.Component {
                                 )
                             })
                         }
-                    </>
-                    : ""
-                }                
-            </div>
+                    </div>
+                </div>
+                : ""
+            }
+            </>
         );
     }
 }
