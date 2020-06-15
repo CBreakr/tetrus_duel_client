@@ -216,6 +216,7 @@ TETRIS ITSELF
 
 .spectator-container {
   display: flex;
+  justify-content: space-around;
 }
 
 .flashing {
