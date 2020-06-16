@@ -3,22 +3,70 @@
   --red: #d00000;
 }
 
+body {
+  color: #222;
+}
+
 .App {
   text-align: center;
 }
+
+/*
+
+SVG
+
+*/
 
 .icon {
   display:inline-block;
   height: 20px;
   width: 20px;
-  margin: 0 8px;
+  margin: 0 12px 0 16px;
 }
 
 .icon svg {
-  transform: scale(1.5) rotate(-75deg);
+  transform: scale(1.8) rotate(-75deg);
   position: relative;
-  top: 0px;
+  top: -4px;
 }
+
+.rect1 {
+  fill: red;
+}
+
+.rect2 {
+  fill: red;
+}
+
+.rect3 {
+  fill: red;
+}
+
+.rect4 {
+  fill: red;
+}
+
+.rect5 {
+  fill: red;
+}
+
+.rect6 {
+  fill: red;
+}
+
+.rect7 {
+  fill: red;
+}
+
+.rect8 {
+  fill: red;
+}
+
+/*
+
+MAIN PAGE
+
+*/
 
 .error {
   color: var(--red);
@@ -26,9 +74,8 @@
 
 .controls {
   display: inline-block;
-  margin: 12px 0;
-  padding: 4px;
-  border: 1px solid #ddd;
+  margin: 36px 0;
+  padding: 12px;
 }
 
 /*
@@ -49,30 +96,36 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap:4px;
+  margin-top: 12px;
 }
 
 .form-cell {
-  border: 2px solid #ddd;
+  /* border: 2px solid #ddd; */
   padding: 8px;
-  height: 120px;
-  width: 120px;
+  height: 144px;
+  width: 144px;
   display:flex;
   flex-direction: column;
   text-align: center;
   justify-content: space-around;
+  background-color: #222;
+  color: white;
 }
 
 .form-cell input {
-  border: 1px solid black;
+  border: 2px solid #eaa;
   padding: 4px;
+  font-size: 14px;
 }
 
 .form-grid button {
   margin-top: 12px;
+  font-size: 16px;
 }
 
 .main-title {
-  font-size: 24px;
+  font-size: 32px;
+  text-shadow: #eaa 1px 1px;
 }
 
 .nav-bar {
@@ -88,12 +141,13 @@ body {
 
 button {
   margin: 2px;
-  padding: 4px 4px;
+  padding: 8px 8px;
   background-color: #eaa;
-  border: 1px solid black;
+  border: 1px solid #eaa;
   border-radius: 4px;
   font-weight: bold;
   transition: 0.2s;
+  text-transform: uppercase;
 }
 
 button:hover {
@@ -103,6 +157,7 @@ button:hover {
 
 .match-container {
   display: flex;
+  justify-content: space-evenly;
 }
 
 /*
@@ -115,21 +170,32 @@ TETRIS ITSELF
 
 .game-board {
   border-collapse: collapse;
-  border: 1px solid black;
+  border: 1px solid #222;
 }
 
 .game-cell {
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   border: 1px solid #ddd;
   margin: 0;
 }
 
 .remote .game-cell {
-  width: 12px;
-  height: 12px;
+  width: 16px;
+  height: 16px;
   border: 1px solid #ddd;
   margin: 0;
+}
+
+.next-piece {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+}
+
+.next-piece-title { 
+  margin-bottom: 8px;
 }
 
 .next-piece .game-cell {
@@ -144,7 +210,7 @@ TETRIS ITSELF
 }
 
 .filled {
-  background-color: black;
+  background-color: #222;
 }
 
 .active {
@@ -156,10 +222,10 @@ TETRIS ITSELF
 }
 
 @keyframes clear-line {
-  0% {background-color: black; border: 1px solid #ddd;}
+  0% {background-color: #222; border: 1px solid #ddd;}
   30% {background-color: var(--red); border: 1px solid #ddd;}
   60% {opacity: 0; border: 1px solid #ddd;}
-  100% {background-color: black; border: 1px solid #ddd;}
+  100% {background-color: #222; border: 1px solid #ddd;}
 } 
 
 .penalty {
@@ -178,24 +244,21 @@ TETRIS ITSELF
   grid-template-columns: 3fr 1fr;
 }
 
+.non-split {
+  margin-top: 32px;
+}
+
 .main-game {
   display:flex;
   flex-direction: column;
   align-items: center;
 }
 
-.active-matches-container {
-  border: 1px solid black;
-  padding: 4px;
-  margin: 4px;
-}
-
-.active-matches-list {
-
-}
-
-.matchup:nth-child(odd) {
-  /* background-color: lightpink; */
+.main-game-solo {
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  padding-left: 20vw;
 }
 
 .win {
@@ -229,35 +292,131 @@ TETRIS ITSELF
   100% {opacity: 1}
 }
 
-.active-players-container {
-  border: 1px solid black;
-  padding: 4px;
-  margin: 4px;
+.active-matches-container,
+.active-players-container,
+.challenges-container {
+  text-align: center;
+  border: 1px solid #222;
+  color: white;
+  background-color: #222;
+  padding: 4px 8px 8px 8px;
+  margin: 16px 12%;
 }
 
-.active-players-list {
+.active-matches-list {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 4px;
 }
 
-.challenges-container {
-  border: 1px solid black;
-  padding: 4px;
-  margin: 4px;
+.active-players-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 4px;
 }
 
-.challenge:nth-child(odd) {
-  /* background-color: lightpink; */
+.challenges-list {
+  display:flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
-.player-display {
-  display: inline-block;
+.player-display, .matchup, .challenge {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border: 1px solid #ddd;
+  border-radius: 4px;
   margin: 4px;
-  padding: 2px;
+  padding: 4px;
+  padding-left: 8px;
+  background-color: white;
+  color: #222;
+}
+
+.challenge {
+  width: 40%;
+}
+
+.matchup {
+  max-width: 50vw;
 }
 
 .space {
   margin: 4px;
+}
+
+.rank {
+  margin-left: 4px;
+  background-color: #222;
+  padding: 2px 6px 2px 4px;
+  color: white;
+}
+
+.username {
+  font-size:20px;
+}
+
+.rank-outer {
+  display: inline-block;
+}
+
+.rank-display {
+  display: flex;
+  align-items: center;
+  margin-right: 8px;
+}
+
+.main-player-display {
+  display: flex;
+  align-items: center;
+}
+
+.dashboard {
+  margin: 4px;
+  display: flex;
+  flex-direction: row;
+}
+
+.waiting-for-opponent {
+  margin: auto 12px;
+  display: flex;
+  align-items: center;
+}
+
+.remote-title {
+  margin-bottom: 8px;
+}
+
+.endgame {
+  display: flex;
+  align-items: center;
+}
+
+.remote-match-column {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+
+  padding-right: 48px;
+  border-right: 1px solid #ddd;
+}
+
+.concede-button-container {
+  margin-top: 12px;
+}
+
+/*
+BACKGROUND
+*/
+
+.animated-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vw;
+  z-index: -100;
+  background-color: lime;
 }

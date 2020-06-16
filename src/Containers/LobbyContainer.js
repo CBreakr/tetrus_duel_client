@@ -235,7 +235,14 @@ class LobbyContainer extends React.Component {
         return (
             <>
             <div className="active-players-container">
-                <h3>Available Players</h3>
+                <h3>
+                    AVAILABLE PLAYERS
+                    {
+                        !this.state.players || this.state.players.length === 1
+                        ? <span> (NONE)</span>
+                        : ""
+                    }
+                </h3>
                 {
                     this.state.players && this.state.players.length > 1
                     ? <div className="active-players-list">
@@ -257,26 +264,34 @@ class LobbyContainer extends React.Component {
                     : ""
                 }                
             </div>
-            {
-                this.state.challenges.length > 0
-                ? <div className="challenges-container">
-                    <h3>Challenges</h3>
-                    <div className="challenges-list">
+            <div className="challenges-container">
+                    <h3>
+                        CHALLENGES
                         {
-                            this.state.challenges.map(challenger => {
-                                return (
-                                    <div key={challenger.id} className="challenge">
-                                        <RankDisplay {...challenger} />
-                                        <button onClick={() => this.triggerAcceptChallenge(challenger.id)}>Accept</button>
-                                        <button onClick={() => this.triggerRejectChallenge(challenger.id)}>Reject</button>
-                                    </div>
-                                )
-                            })
+                            this.state.challenges.length === 0
+                            ? <span> (NONE)</span>
+                            : ""
                         }
-                    </div>
-                </div>
-                : ""
-            }
+                    </h3>
+                    {
+                        this.state.challenges.length > 0
+                        ? 
+                            <div className="challenges-list">
+                                {
+                                    this.state.challenges.map(challenger => {
+                                        return (
+                                            <div key={challenger.id} className="challenge">
+                                                <RankDisplay {...challenger} />
+                                                <button onClick={() => this.triggerAcceptChallenge(challenger.id)}>Accept</button>
+                                                <button onClick={() => this.triggerRejectChallenge(challenger.id)}>Reject</button>
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </div>
+                        : ""
+                    }
+            </div>
             </>
         );
     }

@@ -4,6 +4,8 @@ import { enterLobby } from "../requests";
 import { withRouter } from "react-router-dom";
 import AuthContext from "../AuthContext";
 
+import RankDisplay from "./RankDisplay";
+
 const left_key = 37;
 const up_key = 38;
 const right_key = 39;
@@ -917,7 +919,11 @@ class GameBoard extends React.Component {
     }
 
     getNextPieceCode = () => {
-        return this.getPieceCode(this.state.nextPiece);
+        const piece = this.getPieceCode(this.state.nextPiece); 
+        piece.unshift([0,0,0,0,0,0,0,0,0,0]);
+        piece.push([0,0,0,0,0,0,0,0,0,0]);
+
+        return piece;
     }
 
     //
@@ -1062,14 +1068,31 @@ class GameBoard extends React.Component {
     //
     //
     render(){
+        const splitClass = !this.props.is_remote
+            ? "split"
+            : "non-split";
+
+        const mainClass = this.props.solo
+            ? "main-game-solo"
+            : "main-game";
+
         return (
             <div>                
-                <div className="split">                    
-                    <div className="main-game">
+                <div className={splitClass}>                    
+                    <div className={mainClass}>
                         {
                             this.props.is_remote
-                            && !this.state.updated
-                            ? <div className="flashing">Waiting for stream display...</div>
+                            ? <>
+                                {
+                                    <span className="remote-title">
+                                    {
+                                        !this.state.updated
+                                        ? <div className="flashing">Waiting for <br /> stream display...</div>
+                                        : <RankDisplay {...this.props.user} />
+                                    }
+                                    </span>
+                                }
+                            </>
                             : ""
                         }
                         <table className="game-board">
@@ -1104,24 +1127,27 @@ class GameBoard extends React.Component {
                         <br />
                         {
                             this.props.solo
-                            ? <> 
-                            {
-                                !this.state.gameOver
-                                ? <button onClick={this.toggleGame}>
-                                    {
-                                        `${this.state.buttonText} Game`
-                                    }
-                                </button>
-                                : ""
-                            }                            
-                            <button onClick={this.returnToLobby}>Return To Lobby</button>
-                            </>
+                            ? <div className="solo-button-container"> 
+                                {
+                                    !this.state.gameOver
+                                    ? <button onClick={this.toggleGame}>
+                                        {
+                                            `${this.state.buttonText} Game`
+                                        }
+                                    </button>
+                                    : ""
+                                }                            
+                                <button onClick={this.returnToLobby}>Return To Lobby</button>
+                            </div>
                             : ""
                         }                        
                     </div>
-                    {
+                    { 
                         !this.props.is_remote
-                        ? <div className="next-piece">
+                        ? <div className="next-piece">                            
+                            <span className="next-piece-title">
+                                NEXT
+                            </span>
                             <table className="game-board">
                                 <tbody>
                                     {
@@ -1178,6 +1204,10 @@ class GameBoard extends React.Component {
                                 this.props.solo
                                 ? <div className="controls">
                                     <p>
+                                        Speed increases by 1% with every piece
+                                    </p>
+                                    <br />
+                                    <p>
                                         USE THE ARROW KEYS
                                     </p>
                                     <p>
@@ -1185,13 +1215,6 @@ class GameBoard extends React.Component {
                                     </p>
                                     <p>
                                     <i class="fas fa-arrow-left"></i>/<i class="fas fa-arrow-down"></i>/<i class="fas fa-arrow-right"></i> move current piece
-                                    </p>
-                                    <p>
-                                        <ul>
-                                            <li>
-                                                Speed increases by 1% with every piece
-                                            </li>
-                                        </ul>
                                     </p>
                                 </div>
                                 : ""

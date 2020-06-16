@@ -4,7 +4,7 @@ import { withRouter } from "react-router-dom";
 
 import { enterLobby } from "../requests";
 
-import Dashboard from "../Components/Dashboard";
+// import Dashboard from "../Components/Dashboard";
 import RemoteGameContainer from "./RemoteGameContainer";
 
 import AuthContext from "../AuthContext";
@@ -26,16 +26,19 @@ class SpectatorContainer extends React.Component {
         />
     */
 
-    render() {
-        return (
-            <div>
-                <button onClick={this.returnToLobby}>Return To Lobby</button>
-                <Dashboard 
+    /*
+    <Dashboard 
                         user1={this.props.user1} 
                         user2={this.props.user2} 
                         winner={this.props.winner}
                         spectator_view={true}
                     />
+    */
+
+    render() {
+        return (
+            <div>
+                <button onClick={this.returnToLobby}>Return To Lobby</button>
                 <div className="spectator-container">
                     <RemoteGameContainer 
                         winner_id={this.props.winner_id} 

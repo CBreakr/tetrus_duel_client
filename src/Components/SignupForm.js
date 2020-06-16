@@ -58,7 +58,7 @@ class SignupForm extends React.Component {
                     <div className="form-grid">
                         <span></span>
                         <span className="form-cell">
-                            <h2 className='title is-3'>Register</h2>
+                            <h2 className='title is-3'>SIGN UP</h2>
                         </span>
 
                         <span className="form-cell">
@@ -88,7 +88,7 @@ class SignupForm extends React.Component {
                         </span>
 
                         <span className="form-cell">
-                            <button type="submit">Register</button>
+                            <button type="submit">Sign Up</button>
                         </span>
                         <span></span>
                     </div>

@@ -15,12 +15,12 @@ class GameMatchupContainer extends React.Component {
             <div className="matchup">
                 {
                     this.props.user1 && this.props.user2
-                    ? (<span>
+                    ? (<>
                         <RankDisplay key={this.props.user1.id} {...this.props.user1} /> 
-                        &nbsp;VS&nbsp; 
-                        <RankDisplay key={this.props.user2.id} {...this.props.user2} />
                         <button onClick={this.viewMatch}>View</button>
-                    </span>)
+                        <span className="space"></span>
+                        <RankDisplay key={this.props.user2.id} {...this.props.user2} />
+                    </>)
                     : ""
                 }
             </div>

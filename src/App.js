@@ -20,7 +20,7 @@ import MainContainer from './Containers/MainContainer';
 import MatchContainer from './Containers/MatchContainer';
 import GameBoard from "./Components/GameBoard";
 
-import RankDisplay from "./Components/RankDisplay";
+import MainPlayerDisplay from "./Components/MainPlayerDisplay";
 
 import { getUserDetails } from "./requests";
 
@@ -142,7 +142,7 @@ class App extends React.Component {
               xmlns="http://www.w3.org/2000/svg" 
               x="0px" y="0px"
               viewBox="0 0 30 30">
-              <rect x="1" y="10" width="5" height="5"/>
+              <rect class="rect1" x="1" y="10" width="5" height="5"/>
               <rect x="7" y="10" width="5" height="5"/>
               <rect x="13" y="10" width="5" height="5"/>
               <rect x="19" y="10" width="5" height="5"/>
@@ -157,7 +157,7 @@ class App extends React.Component {
           {
             this.state.user
             ? <>
-                <RankDisplay {...this.state.user} /> 
+                <MainPlayerDisplay />
                 <button onClick={this.logout}>Logout</button>
               </>
             : ""

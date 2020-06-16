@@ -2,20 +2,24 @@ import React from "react";
 
 const RankDisplay = (props) => {
 
-    console.log();
+    console.log("RANK DISPLAY", props);
 
     return (
         <>
         {
             props
-            ? <span className="user-display">
-                {props.name}
-                {
-                    isNumber(props.rank)
-                    ? `(${props.rank})`
-                    : ""
-                }
-            </span>
+            ? <span className="rank-outer">
+                <span className="rank-display">
+                    <span className="username">
+                        {props.name}
+                    </span>
+                    {
+                        isNumber(props.rank)
+                        ? <span className="rank">{props.rank}</span>
+                        : ""
+                    }
+                </span>
+            </span> 
             : ""
         }
         </>        

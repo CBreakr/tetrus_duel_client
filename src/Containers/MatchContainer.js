@@ -12,9 +12,11 @@ import {
         concedeMatch 
     } from "../requests";
 
-import Dashboard from "../Components/Dashboard";
+// import Dashboard from "../Components/Dashboard";
 import GameContainer from "./GameContainer";
 import SpectatorContainer from "./SpectatorContainer";
+
+import RankDisplay from "../Components/RankDisplay";
 
 import AuthContext from "../AuthContext";
 
@@ -186,48 +188,76 @@ class MatchContainer extends React.Component {
 
         console.log("match container state", this.state);
 
-        return (
-            <>
-            {
-                this.state.user1 && this.state.user2
-                && (this.context.user.id === this.state.user1.id
-                    || this.context.user.id === this.state.user2.id)
-                ? <div className="match-container">
-                    <Dashboard 
+        const gameContainerClass = 
+            !this.state.completed_handshakes
+                ? "waiting-for-opponent"
+                : "";
+
+        /*
+        <Dashboard 
                         user1={this.state.user1} 
                         user2={this.state.user2} 
                         winner_id={this.state.winner_id} 
                         concede={this.concede}
                         completed_handshakes={this.state.completed_handshakes}
                     />
+        */
+
+        let otherUser = null;
+        
+        console.log("AAAAAAAAAA", this.state.user1, this.context.user);
+        if(this.state.user1 && this.state.user1.id === this.context.user.id){
+            otherUser = this.state.user1;
+        }
+
+        if(this.state.user2 && this.state.user2.id === this.context.user.id){
+            otherUser = this.state.user2;
+        }
+
+        return (
+            <>
+            {
+                this.state.user1 && this.state.user2
+                && (this.context.user.id === this.state.user1.id
+                    || this.context.user.id === this.state.user2.id)
+                ? <div className="match-container">                    
                     {
                         !this.state.my_handshake
-                        ? <button onClick={this.handshake}>Ready</button>
+                        ? (
+                            <div className="matchup">
+                                <RankDisplay {...otherUser} />
+                                <button onClick={this.handshake}>Ready</button>
+                            </div>
+                        )
                         : <>
                         {
                             !this.state.winner_id
-                            ? <> {
-                                !this.state.completed_handshakes
-                                ? <span className="flashing space">Waiting for opponent...</span>
-                                : <GameContainer 
-                                    {...this.state} 
-                                    sendUpdate={this.sendUpdate} 
-                                />
-                            }
-                            </>
+                            ? <div className={gameContainerClass}> 
+                                {
+                                    !this.state.completed_handshakes
+                                    ? (
+                                        <span className="flashing space">Waiting for opponent...</span>
+                                    )
+                                    : <GameContainer 
+                                        {...this.state} 
+                                        concede={this.concede}
+                                        sendUpdate={this.sendUpdate} 
+                                    />
+                                }
+                            </div>
                             : <>
                             {
                                 this.state.winner_id === this.context.user.id
                                 ? (
-                                    <div>
-                                        <span className="win">YOU WIN</span>
+                                    <div className="endgame">
                                         <button onClick={this.returnToLobby}>Return to Lobby</button>
+                                        <div className="win">YOU WIN</div>
                                     </div>
                                 )
                                 : (
-                                    <div>
-                                        <span className="lose">YOU LOSE</span>
+                                    <div className="endgame">
                                         <button onClick={this.returnToLobby}>Return To Lobby</button>
+                                        <div className="lose">YOU LOSE</div>
                                     </div>
                                 )
                             }
@@ -243,8 +273,6 @@ class MatchContainer extends React.Component {
                         : <span>LOADING...</span>
                     }
                 </>
-                
-                
             }
             </>
         );
