@@ -3,6 +3,8 @@ import React from "react";
 import ActiveMatchesContainer from "./ActiveMatchesContainer";
 import LobbyContainer from "./LobbyContainer";
 
+import AnimateBackground from "../Components/AnimatedBackground";
+
 class MainContainer extends React.Component {
 
     // componentDidMount(){
@@ -13,10 +15,13 @@ class MainContainer extends React.Component {
 
     render() {
         return (
-            <div className="main-container">
-                <ActiveMatchesContainer />
-                <LobbyContainer />
-            </div>
+            <>
+                <AnimateBackground />
+                <div className="main-container">
+                    <ActiveMatchesContainer />
+                    <LobbyContainer />
+                </div>
+            </>
         )
     }
 }

@@ -19,47 +19,57 @@ SVG
 
 .icon {
   display:inline-block;
-  height: 20px;
+  height: 100%;
   width: 20px;
   margin: 0 12px 0 16px;
 }
 
 .icon svg {
-  transform: scale(1.8) rotate(-75deg);
+  transform: scale(2) rotate(-75deg);
   position: relative;
   top: -4px;
 }
 
+/*
 .rect1 {
-  fill: red;
+  fill: black;
 }
 
 .rect2 {
-  fill: red;
+  fill: rgb(255, 237, 0);
 }
 
 .rect3 {
-  fill: red;
+  fill: rgb(255, 140, 0);
 }
 
 .rect4 {
-  fill: red;
+  fill: rgb(228, 3, 3);
 }
 
 .rect5 {
-  fill: red;
+  fill: black;
 }
 
 .rect6 {
-  fill: red;
+  fill: rgb(117, 7, 135);
 }
 
 .rect7 {
-  fill: red;
+  fill: rgb(0, 77, 255);
 }
 
 .rect8 {
-  fill: red;
+  fill: rgb(0, 128, 38);
+}
+*/
+
+.main-title {
+  font-size: 32px;
+  /* text-shadow: #eaa 1px 1px; */
+  /* background-color: #eaa; */
+  font-weight: 500;
+  padding: 0 8px;
 }
 
 /*
@@ -121,11 +131,6 @@ body {
 .form-grid button {
   margin-top: 12px;
   font-size: 16px;
-}
-
-.main-title {
-  font-size: 32px;
-  text-shadow: #eaa 1px 1px;
 }
 
 .nav-bar {
@@ -418,5 +423,50 @@ BACKGROUND
   width: 100vw;
   height: 100vw;
   z-index: -100;
-  background-color: lime;
+  /* background-color: lime; */
+}
+
+.shape {
+  animation: drop 10s linear infinite;
+  position: absolute;
+  top: -10px;
+}
+
+.block {
+  display: inline-block;
+  position: absolute;
+  border-top: 1px solid white;
+  border-left: 1px solid white;
+  background-color: #ddd;
+  width: 12px;
+  height: 12px;
+}
+
+.down1 {
+  top: 13px;
+}
+
+.down2 {
+  top: 26px;
+}
+
+.down3 {
+  top: 39px;
+}
+
+.left1 {
+  left: -13px;
+}
+
+.right1 {
+  left: 13px;
+}
+
+.right2 {
+  left: 26px;
+}
+
+@keyframes drop {
+  0% {top: 0%}
+  100% {top: 100%}
 }

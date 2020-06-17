@@ -18,6 +18,8 @@ import SpectatorContainer from "./SpectatorContainer";
 
 import RankDisplay from "../Components/RankDisplay";
 
+import AnimatedBackground from "../Components/AnimatedBackground";
+
 import AuthContext from "../AuthContext";
 
 class MatchContainer extends React.Component {
@@ -216,6 +218,11 @@ class MatchContainer extends React.Component {
 
         return (
             <>
+            {
+                !this.state.completed_handshakes || this.state.winner_id
+                ? <AnimatedBackground />
+                : ""
+            }
             {
                 this.state.user1 && this.state.user2
                 && (this.context.user.id === this.state.user1.id

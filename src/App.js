@@ -142,7 +142,7 @@ class App extends React.Component {
               xmlns="http://www.w3.org/2000/svg" 
               x="0px" y="0px"
               viewBox="0 0 30 30">
-              <rect class="rect1" x="1" y="10" width="5" height="5"/>
+              <rect x="1" y="10" width="5" height="5"/>
               <rect x="7" y="10" width="5" height="5"/>
               <rect x="13" y="10" width="5" height="5"/>
               <rect x="19" y="10" width="5" height="5"/>
