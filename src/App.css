@@ -310,6 +310,15 @@ TETRIS ITSELF
   overflow-y: auto;
 }
 
+.active-matches-container,
+.challenges-container {
+  max-height: 20vh;
+}
+
+.active-players-container{
+  max-height: 35vh;
+}
+
 .active-matches-list {
   display: grid;
   grid-template-columns: 1fr 1fr;
