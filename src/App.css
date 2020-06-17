@@ -306,7 +306,7 @@ TETRIS ITSELF
 }
 
 .lobby-wrapper {
-  width: 80vw;
+  width: 85vw;
 }
 
 .lobby-container {
@@ -330,14 +330,17 @@ TETRIS ITSELF
   overflow-y: auto;
 }
 
-.challenges-container,
+.challenges-container {
+  max-height: 28vh;
+}
+
 .active-players-container {
   max-height: 47vh;
 }
 
 .active-matches-container {
   max-height: 28vh;
-  width: 80vw;
+  width: 85vw;
 }
 
 .active-matches-list {
