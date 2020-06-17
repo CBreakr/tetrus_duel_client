@@ -17,6 +17,10 @@ SVG
 
 */
 
+* {
+  box-sizing: border-box;
+}
+
 .icon {
   display:inline-block;
   height: 100%;
@@ -142,6 +146,10 @@ body {
 
 .main-container {
   padding: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 button {
@@ -297,6 +305,18 @@ TETRIS ITSELF
   100% {opacity: 1}
 }
 
+.lobby-wrapper {
+  width: 80vw;
+}
+
+.lobby-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-gap: 12px;
+  /* width: 70vw; */
+  justify-items: stretch;
+}
+
 .active-matches-container,
 .active-players-container,
 .challenges-container {
@@ -305,18 +325,19 @@ TETRIS ITSELF
   color: white;
   background-color: #222;
   padding: 4px 8px 8px 8px;
-  margin: 16px 12%;
+  margin-top: 16px;
   max-height: 25vh;
   overflow-y: auto;
 }
 
-.active-matches-container,
-.challenges-container {
-  max-height: 20vh;
+.challenges-container,
+.active-players-container {
+  max-height: 47vh;
 }
 
-.active-players-container{
-  max-height: 35vh;
+.active-matches-container {
+  max-height: 28vh;
+  width: 80vw;
 }
 
 .active-matches-list {
