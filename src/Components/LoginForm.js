@@ -49,7 +49,7 @@ class LoginForm extends React.Component {
                 <form onSubmit={this.login}>                    
                     <div className="form-grid">
                         <span className="form-cell">
-                            <h2 className='title is-3'>Login</h2>
+                            <h2 className='title is-3'>LOG IN</h2>
                         </span>
                         <span></span>
 
@@ -72,7 +72,7 @@ class LoginForm extends React.Component {
 
                         <span></span>
                         <span className="form-cell">
-                            <button type="submit">Login</button>
+                            <button type="submit">Log in</button>
                         </span>
                     </div>
                     {

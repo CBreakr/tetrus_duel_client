@@ -20,7 +20,7 @@ import MainContainer from './Containers/MainContainer';
 import MatchContainer from './Containers/MatchContainer';
 import GameBoard from "./Components/GameBoard";
 
-import RankDisplay from "./Components/RankDisplay";
+import MainPlayerDisplay from "./Components/MainPlayerDisplay";
 
 import { getUserDetails } from "./requests";
 
@@ -157,7 +157,7 @@ class App extends React.Component {
           {
             this.state.user
             ? <>
-                <RankDisplay {...this.state.user} /> 
+                <MainPlayerDisplay />
                 <button onClick={this.logout}>Logout</button>
               </>
             : ""

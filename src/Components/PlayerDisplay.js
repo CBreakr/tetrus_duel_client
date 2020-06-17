@@ -11,6 +11,7 @@ class PlayerDisplay extends React.Component {
             <div>
                 <div className="player-display">
                     <RankDisplay {...this.props} />
+                    <span className="user-buttons-container">
                     {
                         /* both sides must be challenge-free */
                         !this.props.issued_challenge 
@@ -23,7 +24,8 @@ class PlayerDisplay extends React.Component {
                         this.props.challenge_issued_id === this.props.id
                         ? <button onClick={() => this.props.cancelChallenge(this.props.id)}>Cancel Challenge</button>
                         : ""
-                    }         
+                    }
+                    </span>         
                 </div>
             </div>
         );
