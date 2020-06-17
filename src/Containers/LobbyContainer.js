@@ -232,67 +232,69 @@ class LobbyContainer extends React.Component {
         console.log("players render", this.state.players);
         console.log("challenges render", this.state.challenges_issued_by);
 
-        return (
-            <>
-            <div className="active-players-container">
-                <h3>
-                    AVAILABLE PLAYERS
-                    {
-                        !this.state.players || this.state.players.length === 1
-                        ? <span> (NONE)</span>
-                        : ""
-                    }
-                </h3>
-                {
-                    this.state.players && this.state.players.length > 1
-                    ? <div className="active-players-list">
-                        {this.state.players.map(player => {
-                            if(player.id !== this.context.user.id){
-                                return (
-                                    <PlayerDisplay key={player.id} 
-                                        {...player} /* this has the player's issued_challenege value */
-                                        createChallenge={this.triggerIssueChallenge}                                 
-                                        cancelChallenge={this.triggerCancelChallenge}
-                                        challenge_issued_id={this.state.challenge_issued_id} 
-                                        challenges_issued_by={this.state.challenges_issued_by}
-                                    />
-                                )
+        return ( 
+            <div className="lobby-wrapper">
+                <div className="lobby-container">
+                    <div className="active-players-container">
+                        <h3>
+                            AVAILABLE PLAYERS
+                            {
+                                !this.state.players || this.state.players.length === 1
+                                ? <span> (NONE)</span>
+                                : ""
                             }
-                            return null;
-                        })}
-                    </div>
-                    : ""
-                }                
-            </div>
-            <div className="challenges-container">
-                    <h3>
-                        CHALLENGES
+                        </h3>
                         {
-                            this.state.challenges.length === 0
-                            ? <span> (NONE)</span>
-                            : ""
-                        }
-                    </h3>
-                    {
-                        this.state.challenges.length > 0
-                        ? 
-                            <div className="challenges-list">
-                                {
-                                    this.state.challenges.map(challenger => {
+                            this.state.players && this.state.players.length > 1
+                            ? <div className="active-players-list">
+                                {this.state.players.map(player => {
+                                    if(player.id !== this.context.user.id){
                                         return (
-                                            <div key={challenger.id} className="challenge">
-                                                <RankDisplay {...challenger} />
-                                                <button onClick={() => this.triggerAcceptChallenge(challenger.id)}>Accept</button>
-                                                <button onClick={() => this.triggerRejectChallenge(challenger.id)}>Reject</button>
-                                            </div>
+                                            <PlayerDisplay key={player.id} 
+                                                {...player} /* this has the player's issued_challenege value */
+                                                createChallenge={this.triggerIssueChallenge}                                 
+                                                cancelChallenge={this.triggerCancelChallenge}
+                                                challenge_issued_id={this.state.challenge_issued_id} 
+                                                challenges_issued_by={this.state.challenges_issued_by}
+                                            />
                                         )
-                                    })
-                                }
+                                    }
+                                    return null;
+                                })}
                             </div>
-                        : ""
-                    }
+                            : ""
+                        }                
+                    </div>
+                    <div className="challenges-container">
+                            <h3>
+                                CHALLENGES
+                                {
+                                    this.state.challenges.length === 0
+                                    ? <span> (NONE)</span>
+                                    : ""
+                                }
+                            </h3>
+                            {
+                                this.state.challenges.length > 0
+                                ? 
+                                    <div className="challenges-list">
+                                        {
+                                            this.state.challenges.map(challenger => {
+                                                return (
+                                                    <div key={challenger.id} className="challenge">
+                                                        <RankDisplay {...challenger} />
+                                                        <button onClick={() => this.triggerAcceptChallenge(challenger.id)}>Accept</button>
+                                                        <button onClick={() => this.triggerRejectChallenge(challenger.id)}>Reject</button>
+                                                    </div>
+                                                )
+                                            })
+                                        }
+                                    </div>
+                                : ""
+                            }
+                    </div>
+                </div>
             </div>
-            </>
         );
     }
 }
