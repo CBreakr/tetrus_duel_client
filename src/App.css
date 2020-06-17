@@ -331,15 +331,15 @@ TETRIS ITSELF
 }
 
 .challenges-container {
-  max-height: 28vh;
+  max-height: 36vh;
 }
 
 .active-players-container {
-  max-height: 47vh;
+  max-height: 50vh;
 }
 
 .active-matches-container {
-  max-height: 28vh;
+  max-height: 30vh;
   width: 85vw;
 }
 
@@ -351,7 +351,7 @@ TETRIS ITSELF
 
 .active-players-list {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   grid-gap: 4px;
 }
 
@@ -375,11 +375,11 @@ TETRIS ITSELF
 }
 
 .challenge {
-  width: 40%;
+  
 }
 
 .matchup {
-  max-width: 50vw;
+  max-width: 40%;
 }
 
 .space {
