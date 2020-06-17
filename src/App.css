@@ -384,7 +384,8 @@ TETRIS ITSELF
 }
 
 .waiting-for-opponent {
-  margin: auto 12px;
+  font-size: 24px;
+  margin: 20px 12px;
   display: flex;
   align-items: center;
 }
