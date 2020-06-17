@@ -306,6 +306,8 @@ TETRIS ITSELF
   background-color: #222;
   padding: 4px 8px 8px 8px;
   margin: 16px 12%;
+  max-height: 25vh;
+  overflow-y: auto;
 }
 
 .active-matches-list {
