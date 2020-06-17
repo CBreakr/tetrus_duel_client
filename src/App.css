@@ -191,6 +191,7 @@ TETRIS ITSELF
   height: 24px;
   border: 1px solid #ddd;
   margin: 0;
+  z-index: 10;
 }
 
 .remote .game-cell {
@@ -280,6 +281,7 @@ TETRIS ITSELF
   border: 1px solid green;
   margin: 2px;
   padding: 4px;
+  text-align: center;
 }
 
 .lose {
@@ -288,6 +290,7 @@ TETRIS ITSELF
   border: 1px solid var(--red);
   margin: 2px;
   padding: 4px;
+  text-align: center;
 }
 
 .spectator-container {
@@ -379,7 +382,7 @@ TETRIS ITSELF
 }
 
 .matchup {
-  max-width: 40%;
+  
 }
 
 .space {
@@ -431,6 +434,7 @@ TETRIS ITSELF
 
 .endgame {
   display: flex;
+  flex-direction: column;
   align-items: center;
 }
 
@@ -446,6 +450,11 @@ TETRIS ITSELF
 
 .concede-button-container {
   margin-top: 12px;
+}
+
+.smiley {
+  z-index: 10;
+  margin: 16px auto;
 }
 
 /*

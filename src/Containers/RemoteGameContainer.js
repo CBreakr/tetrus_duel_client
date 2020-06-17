@@ -1,6 +1,7 @@
 import React from "react";
 
 import GameBoard from "../Components/GameBoard";
+import SmileyFaceGrid from "../Components/SmileyFaceGrid";
 
 class RemoteGameContainer extends React.Component {
     render() {
@@ -12,8 +13,18 @@ class RemoteGameContainer extends React.Component {
                         <>
                         {
                             this.props.user.id === this.props.winner_id
-                            ? <div className="win">{this.props.user.name} Wins!</div>
-                            : <div className="lose">{this.props.user.name} Loses!</div>
+                            ? (
+                                <div>
+                                    <div className="win">{this.props.user.name} Wins!</div>
+                                    <SmileyFaceGrid is_winner={true} />
+                                </div>
+                                )
+                            : (
+                                <div>
+                                    <div className="lose">{this.props.user.name} Loses</div>
+                                    <SmileyFaceGrid is_winner={false} />
+                                </div>
+                            )
                         }
                         </>
                         )

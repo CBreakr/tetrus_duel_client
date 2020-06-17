@@ -19,6 +19,7 @@ import SpectatorContainer from "./SpectatorContainer";
 import RankDisplay from "../Components/RankDisplay";
 
 import AnimatedBackground from "../Components/AnimatedBackground";
+import SmileyFaceGrid from "../Components/SmileyFaceGrid";
 
 import AuthContext from "../AuthContext";
 
@@ -256,15 +257,21 @@ class MatchContainer extends React.Component {
                             {
                                 this.state.winner_id === this.context.user.id
                                 ? (
-                                    <div className="endgame">
-                                        <button onClick={this.returnToLobby}>Return to Lobby</button>
-                                        <div className="win">YOU WIN</div>
+                                    <div>
+                                        <div className="endgame">
+                                            <button onClick={this.returnToLobby}>Return to Lobby</button>
+                                            <SmileyFaceGrid is_winner={true} />
+                                            <div className="win">YOU WIN!</div>
+                                        </div>
                                     </div>
                                 )
                                 : (
-                                    <div className="endgame">
-                                        <button onClick={this.returnToLobby}>Return To Lobby</button>
-                                        <div className="lose">YOU LOSE</div>
+                                    <div>
+                                        <div className="endgame">
+                                            <button onClick={this.returnToLobby}>Return To Lobby</button>
+                                            <SmileyFaceGrid is_winner={false} />
+                                            <div className="lose">YOU LOSE</div>
+                                        </div>
                                     </div>
                                 )
                             }
