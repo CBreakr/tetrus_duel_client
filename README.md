@@ -1,68 +1,32 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## Flatiron Tetris
 
-In the project directory, you can run:
+Production URL: https://flatirontetris.herokuapp.com/
 
-### `yarn start`
+Video Demo:         https://youtu.be/OisXHjgRHpo
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Server-side repo: https://github.com/CBreakr/tetris_duel_server
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## Have Fun!
 
-### `yarn test`
+Tetris is a game we all grew up loving, a classic example of simplicity in design leading to complex gameplay.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+This site allows users to play the classic game by themselves, or to challenge other player to real-time battles. Winning matches will improve your ranking.
 
-### `yarn build`
+Use the arrow keys to move the pieces (up arrow to rotate). The game speeds up by 1% with every piece, slowly creeping up to a rapid pace.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+In one-on-one mode, matching multiple rows at once will send penalty rows to your opponent equal to the number of rows matched minus one. Plan out your attacks to maximize your chance to win. Penalty rows your opponent is sending to you will flash under the next-piece indicator.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+You can also spectate on matches currently ongoing between other players. Cheer on your friends!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Sign-up, login, and have fun!
 
-### `yarn eject`
+## Technical Notes
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+This project was built with React javascript for the front end and a Ruby on Rails backend. It uses a PostgreSQL database for storage and actioncable/websockets to facilitate real-time interaction.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Next Step
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Right now there are a lot of players who never logged out filling up the main lobby, This makes knowing who's available to challenge, well, challenging 😅
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+I need to differentiate active from inactive players. The idea will be to have player displays either minimized or greyed out if they haven't recorded any activity in 5 minutes.
