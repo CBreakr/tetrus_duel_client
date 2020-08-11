@@ -123,8 +123,8 @@ export const cancelChallenge = (token, user_challenging_id) => {
     .catch(handleError);
 }
 
-export const rejectChallenge = (token, user_challenging_id) => {
-    return axios.post(`${baseURL}/matches/reject_challenge`, {id: user_challenging_id}, config(token))
+export const rejectChallenge = (token, user_challenging_id, isAuto = false) => {
+    return axios.post(`${baseURL}/matches/reject_challenge`, {id: user_challenging_id, auto: isAuto}, config(token))
     .catch(handleError);
 }
 

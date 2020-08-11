@@ -17,6 +17,8 @@ import { withRouter } from "react-router-dom";
 
 import AuthContext from "../AuthContext";
 
+const CHALLENGE_TIME_IN_SECS = 60;
+
 class LobbyContainer extends React.Component {
 
     state = {
@@ -126,9 +128,37 @@ class LobbyContainer extends React.Component {
         // {challenger: current_user, challenged: params[:id]}
         console.log(this.context.user.id, details.challenged);
         if(this.context.user.id === details.challenged){
+            details.challenger.time = CHALLENGE_TIME_IN_SECS;
             this.setState({challenges: [...this.state.challenges, details.challenger]}, ()=> {
                 notifyUser(`Challenge from ${details.challenger.name}`);
             });
+
+            let newTime = CHALLENGE_TIME_IN_SECS;
+
+            console.log("!!!set timeout to reject!!!");
+            const timer = setInterval(() => {
+                console.log("COUNTDOWN", details.challenger.id, newTime);
+
+                newTime--;
+
+                if(newTime <= 0){
+                    // try it out with 10 seconds anyway
+                    this.triggerRejectChallenge(details.challenger.id, true);
+                    clearInterval(timer);
+                }
+                else{
+                    // update the state
+                    const copyChallenges = this.state.challenges.map(challenge => {
+                        const copyC = {...challenge};
+                        if(copyC.id === details.challenger.id){
+                            copyC.time = newTime;
+                        }
+                        return copyC;
+                    });
+                    // console.log(copyChallenges);
+                    this.setState({challenges: copyChallenges});
+                }
+            }, 1000);
         }
 
         // also mark that a challenge has been issued
@@ -200,7 +230,7 @@ class LobbyContainer extends React.Component {
         this.setState({challenge_issued_id: id});
     }
 
-    triggerRejectChallenge = (id) => {
+    triggerRejectChallenge = (id, isAuto = false) => {
         const challenges_copy = [];
         this.state.challenges.forEach(challenge => {
             if(challenge.id !== id){
@@ -209,7 +239,9 @@ class LobbyContainer extends React.Component {
         });
         this.setState({challenges: challenges_copy});
         
-        rejectChallenge(this.context.token, id);
+        console.log("reject", id, isAuto);
+
+        rejectChallenge(this.context.token, id, isAuto);
     }
 
     triggerCancelChallenge = (id) => {
@@ -281,10 +313,13 @@ class LobbyContainer extends React.Component {
                                         {
                                             this.state.challenges.map(challenger => {
                                                 return (
-                                                    <div key={challenger.id} className="challenge">
-                                                        <RankDisplay {...challenger} />
-                                                        <button onClick={() => this.triggerAcceptChallenge(challenger.id)}>Accept</button>
-                                                        <button onClick={() => this.triggerRejectChallenge(challenger.id)}>Reject</button>
+                                                    <div key={challenger.id} className="challenge-container">
+                                                        <div className="challenge">
+                                                            <RankDisplay {...challenger} />
+                                                            <button onClick={() => this.triggerAcceptChallenge(challenger.id)}>Accept</button>
+                                                            <button onClick={() => this.triggerRejectChallenge(challenger.id)}>Reject</button>
+                                                        </div>
+                                                        <div>Time Remaining: <span className="challenge-countdown">{challenger.time}</span></div>
                                                     </div>
                                                 )
                                             })
